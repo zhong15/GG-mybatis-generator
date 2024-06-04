@@ -1,0 +1,53 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="simple" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <plugin type="gg.mybatis.generator.runner.plugin.CommentPlugin"></plugin>
+        <plugin type="gg.mybatis.generator.runner.plugin.BizPackagePlugin">
+            <!-- 基础业务包名，如：foo，foo.bar 等 -->
+            <property name="baseBizPackage" value="gg.mybatis.generator.example"/>
+        </plugin>
+        <plugin type="gg.mybatis.generator.runner.plugin.custom.CustomPlugin"></plugin>
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 此处无需填值，最终会从 Spring Boot 配置中取值 -->
+        <jdbcConnection driverClass="" connectionURL="" userId="" password="">
+            <property name="useInformationSchema" value="true"/>
+        </jdbcConnection>
+
+        <!-- 如果 Maven Project 没有 Parent，则 targetProject="/src/main/java" -->
+        <!-- 如果 Maven Project 有 Parent，则 targetProject="{Project 名字}/src/main/java" -->
+        <javaModelGenerator targetPackage="zhong.model" targetProject="gg-mybatis-generator-example/src/main/java"/>
+
+        <!-- 如果 Maven Project 没有 Parent，则 targetProject="/src/main/resources" -->
+        <!-- 如果 Maven Project 有 Parent，则 targetProject="{Project 名字}/src/main/resources" -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="gg-mybatis-generator-example/src/main/resources"/>
+
+        <!-- 如果 Maven Project 没有 Parent，则 targetProject="/src/main/java" -->
+        <!-- 如果 Maven Project 有 Parent，则 targetProject="{Project 名字}/src/main/java" -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="zhong.mapper" targetProject="gg-mybatis-generator-example/src/main/java"/>
+
+        <table tableName="t_user" domainObjectName="User">
+            <!-- 业务包名，如：foo，foo.bar 等，最终形式：baseBizPackage.bizPackage -->
+            <property name="bizPackage" value="user"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="t_order" domainObjectName="Order">
+            <!-- 业务包名，如：foo，foo.bar 等，最终形式：baseBizPackage.bizPackage -->
+            <property name="bizPackage" value="order"/>
+            <property name="softDeleteColumn" value="is_deleted"/>
+            <property name="softDeleteFalseValue" value="0"/>
+            <property name="softDeleteTrueValue" value="1"/>
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

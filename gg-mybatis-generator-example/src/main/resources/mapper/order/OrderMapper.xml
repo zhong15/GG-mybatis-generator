@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="gg.mybatis.generator.example.order.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="gg.mybatis.generator.example.order.model.Order">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
+  </resultMap>
+  <insert id="insertSelective" parameterType="gg.mybatis.generator.example.order.model.Order">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <sql id="sqlWhere">
+    <where>
+      <if test="whereSql != null and whereSql.length() != 0">
+        <if test="addBrackets != null and addBrackets">
+          (
+        </if>
+        ${whereSql.toString()}
+        <if test="addBrackets != null and addBrackets">
+          )
+        </if>
+      </if>
+      AND is_deleted = 0
+    </where>
+  </sql>
+  <sql id="sqlWhere2">
+    <where>
+      <if test="where != null and where.whereSql != null and where.whereSql.length() != 0">
+        <if test="where.addBrackets != null and where.addBrackets">
+          (
+        </if>
+        ${where.whereSql.toString()}
+        <if test="where.addBrackets != null and where.addBrackets">
+          )
+        </if>
+      </if>
+      AND is_deleted = 0
+    </where>
+  </sql>
+  <delete id="deleteById" parameterType="java.lang.Long">
+    UPDATE t_order SET is_deleted = 1 WHERE id = #{id} AND is_deleted = 0
+  </delete>
+  <delete id="deleteByWhere" parameterType="gg.mybatis.generator.common.sql.Where">
+    UPDATE t_order SET is_deleted = 1
+    <include refid="sqlWhere" />
+  </delete>
+  <update id="updateById">
+    UPDATE t_order
+    <set>
+      <if test="row.orderNo != null">
+        order_no = #{row.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="row.state != null">
+        state = #{row.state,jdbcType=INTEGER},
+      </if>
+      <if test="row.userId != null">
+        user_id = #{row.userId,jdbcType=BIGINT},
+      </if>
+      <if test="row.address != null">
+        address = #{row.address,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createTime != null">
+        create_time = #{row.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateTime != null">
+        update_time = #{row.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.isDeleted != null">
+        is_deleted = #{row.isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="setNullColumnList != null and setNullColumnList.size() != 0">
+        <foreach collection="setNullColumnList" item="column" separator=",">
+          ${column} = NULL,
+        </foreach>
+      </if>
+    </set>
+    WHERE id = #{row.id,jdbcType=BIGINT}
+    AND is_deleted = 0
+  </update>
+  <update id="updateByWhere">
+    UPDATE t_order
+    <set>
+      <if test="row.orderNo != null">
+        order_no = #{row.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="row.state != null">
+        state = #{row.state,jdbcType=INTEGER},
+      </if>
+      <if test="row.userId != null">
+        user_id = #{row.userId,jdbcType=BIGINT},
+      </if>
+      <if test="row.address != null">
+        address = #{row.address,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createTime != null">
+        create_time = #{row.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateTime != null">
+        update_time = #{row.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.isDeleted != null">
+        is_deleted = #{row.isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="setNullColumnList != null and setNullColumnList.size() != 0">
+        <foreach collection="setNullColumnList" item="column" separator=",">
+          ${column} = NULL,
+        </foreach>
+      </if>
+    </set>
+    <include refid="sqlWhere2" />
+  </update>
+  <update id="updateColumnValueById">
+    UPDATE t_order
+    SET ${column} = #{value}
+    WHERE id = #{id}
+    AND is_deleted = 0
+  </update>
+  <select id="selectById" resultMap="BaseResultMap">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT * FROM t_order
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT
+      <foreach collection="columnList" item="column" separator=",">
+        ${column}
+      </foreach>
+      FROM t_order
+    </if>
+    WHERE id = #{id}
+    AND is_deleted = 0
+  </select>
+  <select id="selectByWhere" resultMap="BaseResultMap">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT * FROM t_order
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT
+      <if test="distinct != null and distinct">
+        DISTINCT
+      </if>
+      <foreach collection="columnList" item="column" separator=",">
+        ${column}
+      </foreach>
+      FROM t_order
+    </if>
+    <include refid="sqlWhere2" />
+    <if test="orderBy != null and orderBy.trim() != ''">
+      ORDER BY ${orderBy}
+    </if>
+    <if test="rowCount != null">
+      LIMIT
+      <if test="offset != null">
+        #{offset},
+      </if>
+      #{rowCount}
+    </if>
+  </select>
+  <select id="selectByWherePageIdIn" resultMap="BaseResultMap">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT a.* FROM t_order a
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT
+      <foreach collection="columnList" item="column" separator=",">
+        a.${column}
+      </foreach>
+      FROM t_order a
+    </if>
+    INNER JOIN (SELECT id FROM t_order
+    <include refid="sqlWhere2" />
+    <if test="orderBy != null and orderBy.trim() != ''">
+      ORDER BY ${orderBy}
+    </if>
+    LIMIT #{offset}, #{rowCount}
+    ) b ON a.id = b.id
+    <if test="orderBy != null and orderBy.trim() != ''">
+      ORDER BY ${orderBy}
+    </if>
+  </select>
+  <select id="countByWhere" resultType="java.lang.Long">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT COUNT(*) FROM t_order
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT COUNT(
+      <if test="distinct != null and distinct">
+        DISTINCT
+      </if>
+      <foreach collection="columnList" item="column" separator=",">
+        ${column}
+      </foreach>
+      ) FROM t_order
+    </if>
+    <include refid="sqlWhere2" />
+  </select>
+</mapper>

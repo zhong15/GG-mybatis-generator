@@ -1,0 +1,15 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    name: test
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test
+    username: test
+    password: 123456
+  profiles:
+    active: dev
+mybatis:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="gg.mybatis.generator.example.user.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="gg.mybatis.generator.example.user.model.User">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="is_enable" jdbcType="TINYINT" property="isEnable" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <insert id="insertSelective" parameterType="gg.mybatis.generator.example.user.model.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <sql id="sqlWhere">
+    <where>
+      <if test="whereSql != null and whereSql.length() != 0">
+        ${whereSql.toString()}
+      </if>
+    </where>
+  </sql>
+  <sql id="sqlWhere2">
+    <where>
+      <if test="where != null and where.whereSql != null and where.whereSql.length() != 0">
+        ${where.whereSql.toString()}
+      </if>
+    </where>
+  </sql>
+  <delete id="deleteById" parameterType="java.lang.Long">
+    DELETE FROM t_user WHERE id = #{id}
+  </delete>
+  <delete id="deleteByWhere" parameterType="gg.mybatis.generator.common.sql.Where">
+    DELETE FROM t_user
+    <include refid="sqlWhere" />
+  </delete>
+  <update id="updateById">
+    UPDATE t_user
+    <set>
+      <if test="row.nickname != null">
+        nickname = #{row.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="row.email != null">
+        email = #{row.email,jdbcType=VARCHAR},
+      </if>
+      <if test="row.password != null">
+        password = #{row.password,jdbcType=VARCHAR},
+      </if>
+      <if test="row.isEnable != null">
+        is_enable = #{row.isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="row.createTime != null">
+        create_time = #{row.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateTime != null">
+        update_time = #{row.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="setNullColumnList != null and setNullColumnList.size() != 0">
+        <foreach collection="setNullColumnList" item="column" separator=",">
+          ${column} = NULL,
+        </foreach>
+      </if>
+    </set>
+    WHERE id = #{row.id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByWhere">
+    UPDATE t_user
+    <set>
+      <if test="row.nickname != null">
+        nickname = #{row.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="row.email != null">
+        email = #{row.email,jdbcType=VARCHAR},
+      </if>
+      <if test="row.password != null">
+        password = #{row.password,jdbcType=VARCHAR},
+      </if>
+      <if test="row.isEnable != null">
+        is_enable = #{row.isEnable,jdbcType=TINYINT},
+      </if>
+      <if test="row.createTime != null">
+        create_time = #{row.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateTime != null">
+        update_time = #{row.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="setNullColumnList != null and setNullColumnList.size() != 0">
+        <foreach collection="setNullColumnList" item="column" separator=",">
+          ${column} = NULL,
+        </foreach>
+      </if>
+    </set>
+    <include refid="sqlWhere2" />
+  </update>
+  <update id="updateColumnValueById">
+    UPDATE t_user
+    SET ${column} = #{value}
+    WHERE id = #{id}
+  </update>
+  <select id="selectById" resultMap="BaseResultMap">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT * FROM t_user
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT
+      <foreach collection="columnList" item="column" separator=",">
+        ${column}
+      </foreach>
+      FROM t_user
+    </if>
+    WHERE id = #{id}
+  </select>
+  <select id="selectByWhere" resultMap="BaseResultMap">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT * FROM t_user
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT
+      <if test="distinct != null and distinct">
+        DISTINCT
+      </if>
+      <foreach collection="columnList" item="column" separator=",">
+        ${column}
+      </foreach>
+      FROM t_user
+    </if>
+    <include refid="sqlWhere2" />
+    <if test="orderBy != null and orderBy.trim() != ''">
+      ORDER BY ${orderBy}
+    </if>
+    <if test="rowCount != null">
+      LIMIT
+      <if test="offset != null">
+        #{offset},
+      </if>
+      #{rowCount}
+    </if>
+  </select>
+  <select id="selectByWherePageIdIn" resultMap="BaseResultMap">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT a.* FROM t_user a
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT
+      <foreach collection="columnList" item="column" separator=",">
+        a.${column}
+      </foreach>
+      FROM t_user a
+    </if>
+    INNER JOIN (SELECT id FROM t_user
+    <include refid="sqlWhere2" />
+    <if test="orderBy != null and orderBy.trim() != ''">
+      ORDER BY ${orderBy}
+    </if>
+    LIMIT #{offset}, #{rowCount}
+    ) b ON a.id = b.id
+    <if test="orderBy != null and orderBy.trim() != ''">
+      ORDER BY ${orderBy}
+    </if>
+  </select>
+  <select id="countByWhere" resultType="java.lang.Long">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT COUNT(*) FROM t_user
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT COUNT(
+      <if test="distinct != null and distinct">
+        DISTINCT
+      </if>
+      <foreach collection="columnList" item="column" separator=",">
+        ${column}
+      </foreach>
+      ) FROM t_user
+    </if>
+    <include refid="sqlWhere2" />
+  </select>
+</mapper>
