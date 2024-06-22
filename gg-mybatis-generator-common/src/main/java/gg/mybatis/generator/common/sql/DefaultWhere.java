@@ -106,7 +106,7 @@ public class DefaultWhere extends AbstractWhere implements Where {
     }
 
     @Override
-    public Where ne(Object value) {
+    public Where neq(Object value) {
         appendWhereSql("<>");
         appendWhereSqlParam(value);
         return this;

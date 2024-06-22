@@ -306,20 +306,20 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void ne() {
+    public void neq() {
         // Object value
 
-        // 测试用例：调用 ne(Object) 输入 null
+        // 测试用例：调用 neq(Object) 输入 null
         // 期望结果：报错 SqlWhereException
-        assertSqlWhereException(e -> e.ne(null));
+        assertSqlWhereException(e -> e.neq(null));
 
-        // 测试用例：new DefaultWhere 对象，调用 col("name").ne("value").or("name").ne("value2")
+        // 测试用例：new DefaultWhere 对象，调用 col("name").neq("value").or("name").neq("value2")
         // 期望结果：
         //      toString() = "name <> #{where.paramList[0]} OR name <> #{where.paramList[1]}"
         //      paramList = ["value", "value2"]
         Where where = new DefaultWhere()
-                .col(COLUMN).ne(VALUE)
-                .or(COLUMN).ne(VALUE2);
+                .col(COLUMN).neq(VALUE)
+                .or(COLUMN).neq(VALUE2);
         Assert.assertEquals(where.toString(), COLUMN + " <> #{where.paramList[0]} OR " + COLUMN + " <> #{where.paramList[1]}");
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");

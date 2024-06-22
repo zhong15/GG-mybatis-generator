@@ -112,7 +112,7 @@ public interface Where {
      *
      * @return 当前对象
      */
-    Where ne(Object value);
+    Where neq(Object value);
 
     /**
      * 添加 "< ?"
