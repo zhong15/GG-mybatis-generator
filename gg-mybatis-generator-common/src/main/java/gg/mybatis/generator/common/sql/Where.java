@@ -140,7 +140,7 @@ public interface Where {
      *
      * @return 当前对象
      */
-    Where ge(Object value);
+    Where gte(Object value);
 
     /**
      * 添加 "BETWEEN ? AND ?"

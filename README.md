@@ -213,7 +213,7 @@ public interface UserMapper {
 List<User> userList = userMapper.selectByWherePageIdIn(
         Arrays.asList(User.ID_long, User.NICKNAME_str),
         new DefaultWhere()
-                .col(User.ID_long).ge(1L)
+                .col(User.ID_long).gte(1L)
                 .and()
                 .open()
                     .col(User.NICKNAME_str).like("%abc%")
@@ -232,7 +232,7 @@ int rows = userMapper.deleteByWhere(
         new DefaultWhere()
                 // 必须先调用 .withoutParamAnnotation()
                 .withoutParamAnnotation()
-                .col(User.ID_long).ge(1L)
+                .col(User.ID_long).gte(1L)
                 .and()
                 .open()
                     .col(User.NICKNAME_str).like("%abc%")

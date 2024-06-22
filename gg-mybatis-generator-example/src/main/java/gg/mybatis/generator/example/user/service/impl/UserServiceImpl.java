@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
         // 1(Long), %foo%(String), %foo%(String), 0(Long), 10(Integer)
         list = userMapper.selectByWherePageIdIn(columnList,
                 new DefaultWhere()
-                        .col(User.ID_long).ge(1L)
+                        .col(User.ID_long).gte(1L)
                         .and()
                         .open()
                         .col(User.NICKNAME_str).like("%" + searchKey + "%")

@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
         // 1(Long), %20%(String), %20%(String), 0(Long), 10(Integer)
         list = orderMapper.selectByWherePageIdIn(columnList,
                 new DefaultWhere()
-                        .col(Order.ID_long).ge(1L)
+                        .col(Order.ID_long).gte(1L)
                         .and()
                         .open()
                         .col(Order.ORDER_NO_str).like("%" + searchKey + "%")

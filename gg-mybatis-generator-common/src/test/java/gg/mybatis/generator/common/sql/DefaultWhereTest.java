@@ -410,20 +410,20 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void ge() {
+    public void gte() {
         // Object value
 
-        // 测试用例：调用 ge(Object) 输入 null
+        // 测试用例：调用 gte(Object) 输入 null
         // 期望结果：报错 SqlWhereException
-        assertSqlWhereException(e -> e.ge(null));
+        assertSqlWhereException(e -> e.gte(null));
 
-        // 测试用例：new DefaultWhere 对象，调用 col("name").ge("value").or("name").ge("value2")
+        // 测试用例：new DefaultWhere 对象，调用 col("name").gte("value").or("name").gte("value2")
         // 期望结果：
         //      toString() = "name >= #{where.paramList[0]} OR name >= #{where.paramList[1]}"
         //      paramList = ["value", "value2"]
         Where where = new DefaultWhere()
-                .col(COLUMN).ge(VALUE)
-                .or(COLUMN).ge(VALUE2);
+                .col(COLUMN).gte(VALUE)
+                .or(COLUMN).gte(VALUE2);
         Assert.assertEquals(where.toString(), COLUMN + " >= #{where.paramList[0]} OR " + COLUMN + " >= #{where.paramList[1]}");
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
