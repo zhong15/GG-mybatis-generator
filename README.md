@@ -22,6 +22,94 @@
   - freemarker 用于生成 xml，模版在 src/main/resources 的 tpl 目录下
   - 配置模版是 src/main/resources 的 generatorConfig.xml.example
 
+## 使用示例
+
+### 1、添加 Maven 依赖
+
+```xml
+<dependency>
+    <groupId>zhong</groupId>
+    <artifactId>gg-mybatis-generator-common</artifactId>
+    <version>${revision}</version>
+</dependency>
+
+<dependency>
+    <groupId>zhong</groupId>
+    <artifactId>gg-mybatis-generator-runner</artifactId>
+    <version>${revision}</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <version>${version.mysql-connector-java}</version>
+</dependency>
+```
+
+### 2、在 src/test/java 目录下新建 MyGenerator 类
+```java
+import gg.mybatis.generator.runner.Gen;
+
+public class MyGenerator {
+
+    public static void main(String[] args) {
+        Gen.run();
+    }
+}
+```
+
+### 3、在 src/test/resources 目录下新建文件 generatorConfig.xml
+
+文件模版位于 gg-mybatis-generator-runner 工程的 src/main/resources/generatorConfig.xml.example，具体配置可根据中文注释修改
+
+### 4、生成文件
+
+配置 src/main/java/resources/application.yml 的 MySQL 选项，运行 MyGenerator.main(String[]args) 方法
+
+### 5、使用生成的 Java Mapper 方法示例
+
+```java
+// SELECT a.id , a.nickname
+// ...
+// WHERE id >= ? AND (nickname LIKE ? OR nickname LIKE ?)
+// ORDER BY nickname ASC, id DESC
+// LIMIT ?, ?
+//
+// 1(Long), %abc%(String), %abc%(String), 0(Long), 10(Integer)
+List<User> userList = userMapper.selectByWherePageIdIn(
+        Arrays.asList(User.ID_long, User.NICKNAME_str),
+        new DefaultWhere()
+                .col(User.ID_long).gte(1L)
+                .and()
+                .open()
+                    .col(User.NICKNAME_str).like("%abc%")
+                    .or(User.NICKNAME_str).like("%abc%")
+                .close(),
+        SqlUtils.orderBy(User.NICKNAME_str, SqlUtils.ASC, User.ID_long, SqlUtils.DESC),
+        SqlUtils.offset(pageNum, pageSize),
+        pageSize);
+
+// DELETE FROM
+// ...
+// WHERE id >= ? AND (nickname LIKE ? OR nickname LIKE ?)
+//
+// 1(Long), %abc%(String), %abc%(String)
+int rows = userMapper.deleteByWhere(
+        new DefaultWhere()
+                // 必须先调用 .withoutParamAnnotation()
+                .withoutParamAnnotation()
+                .col(User.ID_long).gte(1L)
+                .and()
+                .open()
+                    .col(User.NICKNAME_str).like("%abc%")
+                    .or(User.NICKNAME_str).like("%abc%")
+                .close()
+);
+```
+
+## 生成文件示例
+
 ### 生成的 Java Model 介绍
 
 ```java
@@ -198,47 +286,6 @@ public interface UserMapper {
      */
     long countByWhere(@Param("distinct") Boolean distinct, @Param("columnList") List<String> columnList, @Param("where") Where where);
 }
-```
-
-### Java Mapper 调用示例
-
-```java
-// SELECT a.id , a.nickname
-// ...
-// WHERE id >= ? AND (nickname LIKE ? OR nickname LIKE ?)
-// ORDER BY nickname ASC, id DESC
-// LIMIT ?, ?
-//
-// 1(Long), %abc%(String), %abc%(String), 0(Long), 10(Integer)
-List<User> userList = userMapper.selectByWherePageIdIn(
-        Arrays.asList(User.ID_long, User.NICKNAME_str),
-        new DefaultWhere()
-                .col(User.ID_long).gte(1L)
-                .and()
-                .open()
-                    .col(User.NICKNAME_str).like("%abc%")
-                    .or(User.NICKNAME_str).like("%abc%")
-                .close(),
-        SqlUtils.orderBy(User.NICKNAME_str, SqlUtils.ASC, User.ID_long, SqlUtils.DESC),
-        SqlUtils.offset(pageNum, pageSize),
-        pageSize);
-
-// DELETE FROM
-// ...
-// WHERE id >= ? AND (nickname LIKE ? OR nickname LIKE ?)
-//
-// 1(Long), %abc%(String), %abc%(String)
-int rows = userMapper.deleteByWhere(
-        new DefaultWhere()
-                // 必须先调用 .withoutParamAnnotation()
-                .withoutParamAnnotation()
-                .col(User.ID_long).gte(1L)
-                .and()
-                .open()
-                    .col(User.NICKNAME_str).like("%abc%")
-                    .or(User.NICKNAME_str).like("%abc%")
-                .close()
-);
 ```
 
 ### 生成的 Mapper xml 介绍
