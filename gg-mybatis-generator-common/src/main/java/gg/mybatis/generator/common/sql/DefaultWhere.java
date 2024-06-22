@@ -120,7 +120,7 @@ public class DefaultWhere extends AbstractWhere implements Where {
     }
 
     @Override
-    public Where le(Object value) {
+    public Where lte(Object value) {
         appendWhereSql("<=");
         appendWhereSqlParam(value);
         return this;

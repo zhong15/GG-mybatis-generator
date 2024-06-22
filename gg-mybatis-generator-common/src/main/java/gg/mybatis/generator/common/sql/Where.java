@@ -126,7 +126,7 @@ public interface Where {
      *
      * @return 当前对象
      */
-    Where le(Object value);
+    Where lte(Object value);
 
     /**
      * 添加 "> ?"
