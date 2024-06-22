@@ -39,94 +39,94 @@ import java.util.List;
  */
 public class CommentPlugin extends PluginAdapter {
 
-  private static Logger log = LoggerFactory.getLogger(CommentPlugin.class);
+    private static Logger log = LoggerFactory.getLogger(CommentPlugin.class);
 
-  @Override
-  public boolean validate(List<String> warnings) {
-    return true;
-  }
-
-  @Override
-  public void initialized(IntrospectedTable introspectedTable) {
-    if (introspectedTable.getRemarks() != null
-        && introspectedTable.getRemarks().trim().length() != 0) {
-      return;
+    @Override
+    public boolean validate(List<String> warnings) {
+        return true;
     }
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rset = null;
-    try {
-      conn = super.context.getConnection();
-      pstmt = conn.prepareStatement(
-          "SELECT table_comment FROM information_schema.tables WHERE table_schema = ? AND table_name = ?");
-      pstmt.setString(1, getDb());
-      pstmt.setString(2, introspectedTable.getTableConfiguration().getTableName());
-      rset = pstmt.executeQuery();
-      while (rset.next()) {
-        String tableComment = rset.getString(1);
-        introspectedTable.setRemarks(tableComment);
-      }
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    } catch (NoSuchFieldException e) {
-      throw new RuntimeException(e);
-    } catch (IllegalAccessException e) {
-      throw new RuntimeException(e);
-    } finally {
-      if (rset != null) {
-        try {
-          rset.close();
-        } catch (SQLException e) {
-          log.warn("rset close error", e);
+
+    @Override
+    public void initialized(IntrospectedTable introspectedTable) {
+        if (introspectedTable.getRemarks() != null
+                && introspectedTable.getRemarks().trim().length() != 0) {
+            return;
         }
-      }
-      if (pstmt != null) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rset = null;
         try {
-          pstmt.close();
+            conn = super.context.getConnection();
+            pstmt = conn.prepareStatement(
+                    "SELECT table_comment FROM information_schema.tables WHERE table_schema = ? AND table_name = ?");
+            pstmt.setString(1, getDb());
+            pstmt.setString(2, introspectedTable.getTableConfiguration().getTableName());
+            rset = pstmt.executeQuery();
+            while (rset.next()) {
+                String tableComment = rset.getString(1);
+                introspectedTable.setRemarks(tableComment);
+            }
         } catch (SQLException e) {
-          log.warn("pstat close error", e);
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (rset != null) {
+                try {
+                    rset.close();
+                } catch (SQLException e) {
+                    log.warn("rset close error", e);
+                }
+            }
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    log.warn("pstat close error", e);
+                }
+            }
+            super.context.closeConnection(conn);
         }
-      }
-      super.context.closeConnection(conn);
     }
-  }
 
-  private String getDb() throws NoSuchFieldException, IllegalAccessException {
-    Field jdbcConfigField = super.context.getClass()
-        .getDeclaredField("jdbcConnectionConfiguration");
-    jdbcConfigField.setAccessible(true);
-    JDBCConnectionConfiguration jdbcConfig = (JDBCConnectionConfiguration) jdbcConfigField.get(
-        super.context);
-    String db = jdbcConfig.getConnectionURL().split("/")[3];
-    jdbcConfigField.setAccessible(false);
-    return db;
-  }
-
-  @Override
-  public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass,
-      IntrospectedTable introspectedTable) {
-    if (introspectedTable.getRemarks() != null
-        && introspectedTable.getRemarks().trim().length() != 0) {
-      topLevelClass.addJavaDocLine("/**");
-      topLevelClass.addJavaDocLine(" * " + introspectedTable.getRemarks().trim());
-      topLevelClass.addJavaDocLine(" * <p>");
-      topLevelClass.addJavaDocLine(
-          " * " + introspectedTable.getTableConfiguration().getTableName());
-      topLevelClass.addJavaDocLine(" */");
+    private String getDb() throws NoSuchFieldException, IllegalAccessException {
+        Field jdbcConfigField = super.context.getClass()
+                .getDeclaredField("jdbcConnectionConfiguration");
+        jdbcConfigField.setAccessible(true);
+        JDBCConnectionConfiguration jdbcConfig = (JDBCConnectionConfiguration) jdbcConfigField.get(
+                super.context);
+        String db = jdbcConfig.getConnectionURL().split("/")[3];
+        jdbcConfigField.setAccessible(false);
+        return db;
     }
-    return true;
-  }
 
-  @Override
-  public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
-    if (introspectedTable.getRemarks() != null
-        && introspectedTable.getRemarks().trim().length() != 0) {
-      interfaze.addJavaDocLine("/**");
-      interfaze.addJavaDocLine(" * " + introspectedTable.getRemarks().trim() + " Mapper");
-      interfaze.addJavaDocLine(" * <p>");
-      interfaze.addJavaDocLine(" * " + introspectedTable.getTableConfiguration().getTableName());
-      interfaze.addJavaDocLine(" */");
+    @Override
+    public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass,
+                                                 IntrospectedTable introspectedTable) {
+        if (introspectedTable.getRemarks() != null
+                && introspectedTable.getRemarks().trim().length() != 0) {
+            topLevelClass.addJavaDocLine("/**");
+            topLevelClass.addJavaDocLine(" * " + introspectedTable.getRemarks().trim());
+            topLevelClass.addJavaDocLine(" * <p>");
+            topLevelClass.addJavaDocLine(
+                    " * " + introspectedTable.getTableConfiguration().getTableName());
+            topLevelClass.addJavaDocLine(" */");
+        }
+        return true;
     }
-    return true;
-  }
+
+    @Override
+    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
+        if (introspectedTable.getRemarks() != null
+                && introspectedTable.getRemarks().trim().length() != 0) {
+            interfaze.addJavaDocLine("/**");
+            interfaze.addJavaDocLine(" * " + introspectedTable.getRemarks().trim() + " Mapper");
+            interfaze.addJavaDocLine(" * <p>");
+            interfaze.addJavaDocLine(" * " + introspectedTable.getTableConfiguration().getTableName());
+            interfaze.addJavaDocLine(" */");
+        }
+        return true;
+    }
 }
