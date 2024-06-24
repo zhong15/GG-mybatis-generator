@@ -8,6 +8,10 @@
 - 在 Java 代码调用 Mapper `select`、`update`、`delete`、`count` 方法时无需关心软删除字段，仅需在生成 Java 代码、Mapper xml 代码时指定表的软删除属性即可
 - 可以指定每个表生成的代码的目录
 
+## 整体工作流程
+
+![图1](https://github.com/zhong15/GG-mybatis-generator/blob/main/arch.png?raw=true)
+
 ## 工程介绍
 
 - gg-mybatis-generator-common
