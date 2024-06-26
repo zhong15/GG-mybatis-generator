@@ -90,7 +90,7 @@ public class CustomPlugin extends PluginAdapter {
 
                 log.info("生成 {} sqlMap: {}", introspectedTable.getTableConfiguration().getTableName(), statementId);
 
-                XmlElement xmlElement = GenUtils.xmlElement(ss(m.getName(), prefix), "id", statementId);
+                XmlElement xmlElement = GenUtils.xmlElement(getXmlElementType(m.getName(), prefix), "id", statementId);
                 document.getRootElement().addElement(xmlElement);
                 try {
                     m.invoke(runner, xmlElement, introspectedTable);
@@ -105,23 +105,23 @@ public class CustomPlugin extends PluginAdapter {
         return true;
     }
 
-    private static String ss(String name, String prefix) {
-        if (name.startsWith(prefix + "Insert")) {
+    private static String getXmlElementType(String methodName, String methodNamePrefix) {
+        if (methodName.startsWith(methodNamePrefix + "Insert")) {
             return "insert";
         }
-        if (name.startsWith(prefix + "Delete")) {
+        if (methodName.startsWith(methodNamePrefix + "Delete")) {
             return "delete";
         }
-        if (name.startsWith(prefix + "Update")) {
+        if (methodName.startsWith(methodNamePrefix + "Update")) {
             return "update";
         }
-        if (name.startsWith(prefix + "Count")) {
+        if (methodName.startsWith(methodNamePrefix + "Count")) {
             return "select";
         }
-        if (name.startsWith(prefix + "Select")) {
+        if (methodName.startsWith(methodNamePrefix + "Select")) {
             return "select";
         }
-        if (name.startsWith(prefix + "Sql")) {
+        if (methodName.startsWith(methodNamePrefix + "Sql")) {
             return "sql";
         }
         throw new IllegalArgumentException("name 命名错误");
