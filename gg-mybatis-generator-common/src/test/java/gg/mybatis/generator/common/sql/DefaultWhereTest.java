@@ -58,7 +58,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void clear() {
+    public void test_clear() {
         // 当前类是子类，无全局变量
 
         // 测试用例：
@@ -66,7 +66,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void withoutParamAnnotation() {
+    public void test_withoutParamAnnotation() {
         // 测试用例：new DefaultWhere
         // 期望结果：whereParamName = "where"
         Where where = new DefaultWhere();
@@ -105,7 +105,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void open() {
+    public void test_open() {
         // 测试用例：new DefaultWhere 对象，调用 open() 方法
         // 期望结果：
         //      toString() = "("
@@ -122,7 +122,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void close() {
+    public void test_close() {
         // 测试用例：new DefaultWhere 对象，调用 close() 方法
         // 期望结果：
         //      toString() = ")"
@@ -139,7 +139,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void col() {
+    public void test_col() {
         // String column
 
         // 测试用例：col(String) 输入 null
@@ -160,14 +160,14 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void and() {
+    public void test_and() {
         // 测试用例：new DefaultWhere 对象，调用 and() 方法
         // 期望结果：toString() = "AND"
         Assert.assertEquals(new DefaultWhere().and().toString(), "AND");
     }
 
     @Test
-    public void and2() {
+    public void test_and2() {
         // String column
 
         // 测试用例：and(String) 输入 null
@@ -188,7 +188,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void or() {
+    public void test_or() {
         // 测试用例：new DefaultWhere 对象，调用 or() 方法
         // 期望结果：
         //      toString() = "OR"
@@ -220,7 +220,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void or2() {
+    public void test_or2() {
         // String column
 
         // 测试用例：or(String) 输入 null
@@ -266,21 +266,21 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void isNull() {
+    public void test_isNull() {
         // 测试用例：调用 isNull()
         // 期望结果：toString() = "IS NULL"
         Assert.assertEquals(new DefaultWhere().isNull().toString(), "IS NULL");
     }
 
     @Test
-    public void isNotNull() {
+    public void test_isNotNull() {
         // 测试用例：调用 isNotNull()
         // 期望结果：toString() = "IS NOT NULL"
         Assert.assertEquals(new DefaultWhere().isNotNull().toString(), "IS NOT NULL");
     }
 
     @Test
-    public void eq() {
+    public void test_eq() {
         // Object value
 
         // 测试用例：调用 eq(Object) 输入 null
@@ -306,7 +306,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void neq() {
+    public void test_neq() {
         // Object value
 
         // 测试用例：调用 neq(Object) 输入 null
@@ -332,7 +332,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void lt() {
+    public void test_lt() {
         // Object value
 
         // 测试用例：调用 lt(Object) 输入 null
@@ -358,7 +358,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void lte() {
+    public void test_lte() {
         // Object value
 
         // 测试用例：调用 lte(Object) 输入 null
@@ -384,7 +384,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void gt() {
+    public void test_gt() {
         // Object value
 
         // 测试用例：调用 gt(Object) 输入 null
@@ -410,7 +410,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void gte() {
+    public void test_gte() {
         // Object value
 
         // 测试用例：调用 gte(Object) 输入 null
@@ -436,7 +436,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void between() {
+    public void test_between() {
         // Object value1, Object value2
 
         // 测试用例：调用 between(Object, Object) 输入 null, null
@@ -472,7 +472,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void in() {
+    public void test_in() {
         // List<?> list
 
         // 测试用例：调用 in(List) 输入 null
@@ -518,7 +518,7 @@ public class DefaultWhereTest {
     }
 
     @Test
-    public void like() {
+    public void test_like() {
         // String value
 
         // 测试用例：调用 like(String) 输入 null

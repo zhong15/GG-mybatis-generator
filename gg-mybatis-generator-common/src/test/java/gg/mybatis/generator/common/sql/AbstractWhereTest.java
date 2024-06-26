@@ -84,7 +84,7 @@ public class AbstractWhereTest {
     }
 
     @Test
-    public void abstractWhereClear() {
+    public void test_abstractWhereClear() {
         // 测试用例：调用方法，使各个全局变量初始值变更
         // 期望结果：
         //      whereParamName = null
@@ -178,7 +178,7 @@ public class AbstractWhereTest {
     }
 
     @Test
-    public void noWhereParamName() {
+    public void test_noWhereParamName() {
         // 测试用例：nwe DefaultWhere 对象
         // 期望结果：whereParamName = "where"
         Where where = new DefaultWhere();
@@ -235,7 +235,7 @@ public class AbstractWhereTest {
     }
 
     @Test
-    public void incrementBrackets() {
+    public void test_incrementBrackets() {
         // 测试用例：new DefaultWhere 对象
         // 期望结果：brackets = 0
         Where where = new DefaultWhere();
@@ -266,7 +266,7 @@ public class AbstractWhereTest {
     }
 
     @Test
-    public void decrementBrackets() {
+    public void test_decrementBrackets() {
         // 测试用例：new DefaultWhere 对象
         // 期望结果：brackets = 0
         Where where = new DefaultWhere();
@@ -297,7 +297,7 @@ public class AbstractWhereTest {
     }
 
     @Test
-    public void checkAndSetAddBrackets() {
+    public void test_checkAndSetAddBrackets() {
         // 测试用例：new DefaultWhere 对象
         // 期望结果：
         //      brackets = 0
@@ -368,7 +368,7 @@ public class AbstractWhereTest {
     }
 
     @Test
-    public void appendWhereSql() {
+    public void test_appendWhereSql() {
         // 测试用例：传入 null
         // 期望结果：报错 SqlWhereException
         assertSqlWhereException(e -> e.col(null));
@@ -416,7 +416,7 @@ public class AbstractWhereTest {
     }
 
     @Test
-    public void appendWhereSqlParam() {
+    public void test_appendWhereSqlParam() {
         // 测试用例：传入"null"
         // 期望结果：报错 SqlWhereException
         assertSqlWhereException(e -> e.eq(null));
