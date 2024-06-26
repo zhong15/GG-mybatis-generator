@@ -124,7 +124,7 @@ public class CustomPlugin extends PluginAdapter {
         if (methodName.startsWith(methodNamePrefix + "Sql")) {
             return "sql";
         }
-        throw new IllegalArgumentException("name 命名错误");
+        throw new IllegalArgumentException("methodName 命名错误：" + methodName + "，前缀：" + methodNamePrefix);
     }
 
     @Override
