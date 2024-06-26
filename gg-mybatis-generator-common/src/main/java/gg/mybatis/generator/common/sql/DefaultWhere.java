@@ -28,12 +28,20 @@ import java.util.List;
 public class DefaultWhere extends AbstractWhere implements Where {
     @Override
     public Where clear() {
+        // PowerMockito mock 的方法 foo() 是当前（实例的）类的方法（即使不重写 foo()）
+        // 如果当前（实例的）类用 super 调用 foo()
+        // 则 mock 测试会失败
+        // 即 mock 只针对当前（实例的）类的方法（即使不重写 foo()）
         /*super.*/abstractWhereClear();
         return this;
     }
 
     @Override
     public Where withoutParamAnnotation() {
+        // PowerMockito mock 的方法 foo() 是当前（实例的）类的方法（即使不重写 foo()）
+        // 如果当前（实例的）类用 super 调用 foo()
+        // 则 mock 测试会失败
+        // 即 mock 只针对当前（实例的）类的方法（即使不重写 foo()）
         /*super.*/noWhereParamName();
         return this;
     }
