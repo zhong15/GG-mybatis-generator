@@ -44,9 +44,6 @@
         <table tableName="t_order" domainObjectName="Order">
             <!-- 业务包名，如：foo，foo.bar 等，最终形式：baseBizPackage.bizPackage -->
             <property name="bizPackage" value="order"/>
-            <property name="softDeleteColumn" value="is_deleted"/>
-            <property name="softDeleteFalseValue" value="0"/>
-            <property name="softDeleteTrueValue" value="1"/>
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

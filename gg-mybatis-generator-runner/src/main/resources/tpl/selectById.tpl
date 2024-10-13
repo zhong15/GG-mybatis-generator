@@ -9,6 +9,4 @@
       FROM ${tableName}
     </if>
     WHERE ${pk.actualColumnName} = <#noparse>#{id}</#noparse>
-<#if softDeleteColumn??>
-    AND ${softDeleteColumn} = ${softDeleteFalseValue}
-</#if>
+    AND is_deleted = 0

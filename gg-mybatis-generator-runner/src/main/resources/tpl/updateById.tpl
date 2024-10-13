@@ -12,6 +12,4 @@
       </if>
     </set>
     WHERE ${pk.actualColumnName} = <#noparse>#{row.</#noparse>${pk.javaProperty},jdbcType=${pk.jdbcTypeName}}
-<#if softDeleteColumn??>
-    AND ${softDeleteColumn} = ${softDeleteFalseValue}
-</#if>
+    AND is_deleted = 0

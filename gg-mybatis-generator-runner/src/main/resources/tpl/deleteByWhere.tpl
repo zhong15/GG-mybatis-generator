@@ -1,6 +1,2 @@
-<#if softDeleteColumn??>
-    UPDATE ${tableName} SET ${softDeleteColumn} = ${softDeleteTrueValue}
-<#else>
-    DELETE FROM ${tableName}
-</#if>
-    <include refid="sqlWhere" />
+UPDATE ${tableName} SET is_deleted = 1
+<include refid="sqlWhere" />

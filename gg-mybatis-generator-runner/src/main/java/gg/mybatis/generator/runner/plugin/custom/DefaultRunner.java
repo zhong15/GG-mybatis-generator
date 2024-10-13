@@ -40,10 +40,6 @@ import java.util.stream.Collectors;
  * @since 0.0.1
  */
 public class DefaultRunner implements Runner {
-    private static final String PROP_SOFT_DELETE_COLUMN = "softDeleteColumn";
-    private static final String PROP_SOFT_DELETE_FALSE_VALUE = "softDeleteFalseValue";
-    private static final String PROP_SOFT_DELETE_TRUE_VALUE = "softDeleteTrueValue";
-
     private static final String WHERE_CLASS_NAME = Where.class.getName();
     private static final String WHERE_CLASS_SIMPLE_NAME = Where.class.getSimpleName();
     private static final String TPL_DIR = "tpl";
@@ -80,36 +76,6 @@ public class DefaultRunner implements Runner {
                 }
             }
         }
-    }
-
-    private static String getSoftDeleteColumn(IntrospectedTable introspectedTable) {
-        String value = introspectedTable.getTableConfiguration().getProperties().getProperty(PROP_SOFT_DELETE_COLUMN);
-        if (value == null || value.trim().length() == 0) {
-            return null;
-        }
-        if (getSoftDeleteFalseValue(introspectedTable) == null) {
-            throw new IllegalArgumentException("必须指定 " + PROP_SOFT_DELETE_FALSE_VALUE);
-        }
-        if (getSoftDeleteTrueValue(introspectedTable) == null) {
-            throw new IllegalArgumentException("必须指定 " + PROP_SOFT_DELETE_TRUE_VALUE);
-        }
-        return value.trim();
-    }
-
-    private static String getSoftDeleteFalseValue(IntrospectedTable introspectedTable) {
-        String value = introspectedTable.getTableConfiguration().getProperties().getProperty(PROP_SOFT_DELETE_FALSE_VALUE);
-        if (value == null || value.trim().length() == 0) {
-            return null;
-        }
-        return value.trim();
-    }
-
-    private static String getSoftDeleteTrueValue(IntrospectedTable introspectedTable) {
-        String value = introspectedTable.getTableConfiguration().getProperties().getProperty(PROP_SOFT_DELETE_TRUE_VALUE);
-        if (value == null || value.trim().length() == 0) {
-            return null;
-        }
-        return value.trim();
     }
 
     @Override
@@ -280,16 +246,12 @@ public class DefaultRunner implements Runner {
     @Override
     public void sqlMapSqlWhere(XmlElement element, IntrospectedTable introspectedTable) {
         Map<String, Object> map = new HashMap<>();
-        map.put("softDeleteColumn", getSoftDeleteColumn(introspectedTable));
-        map.put("softDeleteFalseValue", getSoftDeleteFalseValue(introspectedTable));
         tpl(element, map);
     }
 
     @Override
     public void sqlMapSqlWhere2(XmlElement element, IntrospectedTable introspectedTable) {
         Map<String, Object> map = new HashMap<>();
-        map.put("softDeleteColumn", getSoftDeleteColumn(introspectedTable));
-        map.put("softDeleteFalseValue", getSoftDeleteFalseValue(introspectedTable));
         tpl(element, map);
     }
 
@@ -306,9 +268,6 @@ public class DefaultRunner implements Runner {
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", introspectedTable.getTableConfiguration().getTableName());
         map.put("pk", GenUtils.primaryKey(introspectedTable));
-        map.put("softDeleteColumn", getSoftDeleteColumn(introspectedTable));
-        map.put("softDeleteTrueValue", getSoftDeleteTrueValue(introspectedTable));
-        map.put("softDeleteFalseValue", getSoftDeleteFalseValue(introspectedTable));
         tpl(element, map);
     }
 
@@ -325,8 +284,6 @@ public class DefaultRunner implements Runner {
 
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", introspectedTable.getTableConfiguration().getTableName());
-        map.put("softDeleteColumn", getSoftDeleteColumn(introspectedTable));
-        map.put("softDeleteTrueValue", getSoftDeleteTrueValue(introspectedTable));
         tpl(element, map);
     }
 
@@ -345,8 +302,6 @@ public class DefaultRunner implements Runner {
                 .filter(e -> !introspectedTable.getPrimaryKeyColumns().contains(e))
                 .collect(Collectors.toList()));
         map.put("pk", GenUtils.primaryKey(introspectedTable));
-        map.put("softDeleteColumn", getSoftDeleteColumn(introspectedTable));
-        map.put("softDeleteFalseValue", getSoftDeleteFalseValue(introspectedTable));
         tpl(element, map);
     }
 
@@ -363,8 +318,6 @@ public class DefaultRunner implements Runner {
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", introspectedTable.getTableConfiguration().getTableName());
         map.put("pk", GenUtils.primaryKey(introspectedTable));
-        map.put("softDeleteColumn", getSoftDeleteColumn(introspectedTable));
-        map.put("softDeleteFalseValue", getSoftDeleteFalseValue(introspectedTable));
         tpl(element, map);
     }
 
@@ -402,8 +355,6 @@ public class DefaultRunner implements Runner {
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", introspectedTable.getTableConfiguration().getTableName());
         map.put("pk", GenUtils.primaryKey(introspectedTable));
-        map.put("softDeleteColumn", getSoftDeleteColumn(introspectedTable));
-        map.put("softDeleteFalseValue", getSoftDeleteFalseValue(introspectedTable));
         tpl(element, map);
     }
 
