@@ -45,11 +45,6 @@ public abstract class AbstractWhere {
      */
     private StringBuilder whereSql;
     /**
-     * Prepare Statement 的参数个数
-     * <p>参数按顺序传入，paramNumber 是当前参数的序号，从 0 开始计数递增
-     */
-    private int paramNumber;
-    /**
      * 当前类的实例变量 {@link #paramList} 的名字
      */
     private static final String PARAM_LIST = "paramList";
@@ -66,7 +61,6 @@ public abstract class AbstractWhere {
         if (whereSql != null) {
             whereSql.setLength(0);
         }
-        paramNumber = 0;
         if (paramList != null) {
             paramList.clear();
         }
@@ -120,8 +114,6 @@ public abstract class AbstractWhere {
             throw new SqlWhereException("param is null");
         }
 
-        final int index = paramNumber++;
-
         if (paramList == null) {
             paramList = new ArrayList<>();
         }
@@ -139,6 +131,6 @@ public abstract class AbstractWhere {
         if (whereParamName != null) {
             whereSql.append(whereParamName).append(".");
         }
-        whereSql.append(PARAM_LIST).append("[").append(index).append("]}");
+        whereSql.append(PARAM_LIST).append("[").append(paramList.size() - 1).append("]}");
     }
 }
