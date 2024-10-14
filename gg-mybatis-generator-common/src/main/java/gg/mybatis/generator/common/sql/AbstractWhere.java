@@ -72,7 +72,16 @@ public abstract class AbstractWhere {
 
     @Override
     public String toString() {
-        return whereSql == null ? "" : whereSql.toString();
+        if (whereSql == null) {
+            return "";
+        }
+        if (!addBrackets) {
+            return whereSql.toString();
+        }
+        whereSql.append(")");
+        String s = whereSql.toString();
+        whereSql.setLength(whereSql.length() - 1);
+        return s;
     }
 
     protected void incrementBrackets() {
@@ -88,6 +97,12 @@ public abstract class AbstractWhere {
 
     protected void checkAndSetAddBrackets() {
         if (brackets == 0) {
+            if (!addBrackets) {
+                if (whereSql == null) {
+                    whereSql = new StringBuilder();
+                }
+                whereSql.insert(0, "(");
+            }
             addBrackets = true;
         }
     }
