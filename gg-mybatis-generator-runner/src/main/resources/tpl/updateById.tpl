@@ -7,7 +7,7 @@
 </#list>
       <if test="setNullColumnList != null and setNullColumnList.size() != 0">
         <foreach collection="setNullColumnList" item="column" separator=",">
-          <#noparse>${column} = NULL,</#noparse>
+          <#noparse>${column} = NULL</#noparse>
         </foreach>
       </if>
     </set>
