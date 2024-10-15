@@ -79,6 +79,7 @@ public class UserTest {
         user.setIsEnable((byte) 0);
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
+        user.setIsEnable((byte) 0);
 
         StringBuilder sb = new StringBuilder();
         sb.append(user.getClass().getSimpleName());
@@ -91,6 +92,7 @@ public class UserTest {
         sb.append(", isEnable=").append(user.getIsEnable());
         sb.append(", createTime=").append(user.getCreateTime());
         sb.append(", updateTime=").append(user.getUpdateTime());
+        sb.append(", isDeleted=").append(user.getIsDeleted());
         sb.append(", serialVersionUID=").append(1);
         sb.append("]");
 
