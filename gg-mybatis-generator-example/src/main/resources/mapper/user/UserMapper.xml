@@ -9,6 +9,7 @@
     <result column="is_enable" jdbcType="TINYINT" property="isEnable" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
   </resultMap>
   <insert id="insertSelective" parameterType="gg.mybatis.generator.example.user.model.User">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -34,6 +35,9 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="nickname != null">
@@ -53,6 +57,9 @@
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -100,6 +107,9 @@
       <if test="row.updateTime != null">
         update_time = #{row.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="row.isDeleted != null">
+        is_deleted = #{row.isDeleted,jdbcType=TINYINT},
+      </if>
       <if test="setNullColumnList != null and setNullColumnList.size() != 0">
         <foreach collection="setNullColumnList" item="column" separator=",">
           ${column} = NULL
@@ -129,6 +139,9 @@
       </if>
       <if test="row.updateTime != null">
         update_time = #{row.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.isDeleted != null">
+        is_deleted = #{row.isDeleted,jdbcType=TINYINT},
       </if>
       <if test="setNullColumnList != null and setNullColumnList.size() != 0">
         <foreach collection="setNullColumnList" item="column" separator=",">

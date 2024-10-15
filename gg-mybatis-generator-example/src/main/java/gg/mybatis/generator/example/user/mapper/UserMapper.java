@@ -16,11 +16,9 @@
 
 package gg.mybatis.generator.example.user.mapper;
 
-import gg.mybatis.generator.common.sql.Where;
+import gg.mybatis.generator.common.mapper.BaseMapper;
 import gg.mybatis.generator.example.user.model.User;
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 用户表 Mapper
@@ -28,24 +26,5 @@ import org.apache.ibatis.annotations.Param;
  * t_user
  */
 @Mapper
-public interface UserMapper {
-    int insertSelective(User row);
-
-    int deleteById(Long id);
-
-    int deleteByWhere(Where where);
-
-    int updateById(@Param("row") User row, @Param("setNullColumnList") List<String> setNullColumnList);
-
-    int updateByWhere(@Param("row") User row, @Param("setNullColumnList") List<String> setNullColumnList, @Param("where") Where where);
-
-    int updateColumnValueById(@Param("id") Long id, @Param("column") String column, @Param("value") Object value);
-
-    User selectById(@Param("id") Long id, @Param("columnList") List<String> columnList);
-
-    List<User> selectByWhere(@Param("distinct") Boolean distinct, @Param("columnList") List<String> columnList, @Param("where") Where where, @Param("orderBy") String orderBy, @Param("offset") Long offset, @Param("rowCount") Integer rowCount);
-
-    List<User> selectByWherePageIdIn(@Param("columnList") List<String> columnList, @Param("where") Where where, @Param("orderBy") String orderBy, @Param("offset") long offset, @Param("rowCount") int rowCount);
-
-    long countByWhere(@Param("distinct") Boolean distinct, @Param("columnList") List<String> columnList, @Param("where") Where where);
+public interface UserMapper extends BaseMapper<User, Long> {
 }

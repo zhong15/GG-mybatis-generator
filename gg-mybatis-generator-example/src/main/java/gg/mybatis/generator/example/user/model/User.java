@@ -1,19 +1,3 @@
-/*
- * Copyright 2024 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package gg.mybatis.generator.example.user.model;
 
 import gg.mybatis.generator.common.domain.BaseEntity;
@@ -58,6 +42,11 @@ public class User extends BaseEntity<Long> implements java.io.Serializable {
      * 修改时间，类型：java.util.Date
      */
     public static final String UPDATE_TIME_date = "update_time";
+
+    /**
+     * 是否删除，0：否，1：是，类型：Byte
+     */
+    public static final String IS_DELETED_byte = "is_deleted";
 
     /**
      * 昵称
@@ -126,6 +115,7 @@ public class User extends BaseEntity<Long> implements java.io.Serializable {
         sb.append(", isEnable=").append(isEnable);
         sb.append(", createTime=").append(super.getCreateTime());
         sb.append(", updateTime=").append(super.getUpdateTime());
+        sb.append(", isDeleted=").append(super.getIsDeleted());
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -149,7 +139,8 @@ public class User extends BaseEntity<Long> implements java.io.Serializable {
             && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
             && (this.getIsEnable() == null ? other.getIsEnable() == null : this.getIsEnable().equals(other.getIsEnable()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
+            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
+            && (this.getIsDeleted() == null ? other.getIsDeleted() == null : this.getIsDeleted().equals(other.getIsDeleted()));
     }
 
     @Override
@@ -163,6 +154,7 @@ public class User extends BaseEntity<Long> implements java.io.Serializable {
         result = prime * result + ((getIsEnable() == null) ? 0 : getIsEnable().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
+        result = prime * result + ((getIsDeleted() == null) ? 0 : getIsDeleted().hashCode());
         return result;
     }
 
@@ -176,6 +168,7 @@ public class User extends BaseEntity<Long> implements java.io.Serializable {
         this.isEnable = null;
         // super.setCreateTime(null);
         // super.setUpdateTime(null);
+        // super.setIsDeleted(null);
     }
 
     public static boolean isColumn(String column) {
@@ -189,6 +182,7 @@ public class User extends BaseEntity<Long> implements java.io.Serializable {
                 || column.equals("password")
                 || column.equals("is_enable")
                 || column.equals("create_time")
-                || column.equals("update_time");
+                || column.equals("update_time")
+                || column.equals("is_deleted");
     }
 }

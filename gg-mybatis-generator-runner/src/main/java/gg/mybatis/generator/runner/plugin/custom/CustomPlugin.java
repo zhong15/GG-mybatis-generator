@@ -16,6 +16,7 @@
 
 package gg.mybatis.generator.runner.plugin.custom;
 
+import gg.mybatis.generator.common.mapper.BaseMapper;
 import gg.mybatis.generator.runner.utils.GenUtils;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -144,9 +145,19 @@ public class CustomPlugin extends PluginAdapter {
     @Override
     public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         /*
-         * 删除 Example 的 import
+         * 删除、添加 Example 的 import
          */
         interfaze.getImportedTypes().remove(new FullyQualifiedJavaType(introspectedTable.getExampleType()));
+        interfaze.getImportedTypes().remove(new FullyQualifiedJavaType("java.util.List"));
+        interfaze.getImportedTypes().remove(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
+        FullyQualifiedJavaType baseMapper = new FullyQualifiedJavaType(BaseMapper.class.getName());
+        interfaze.getImportedTypes().add(baseMapper);
+
+        /*
+         * 继承 BaseMapper 接口
+         */
+        baseMapper = GenUtils.javaType("BaseMapper", introspectedTable.getBaseRecordType(), GenUtils.primaryKeyShortJavaType(introspectedTable));
+        interfaze.addSuperInterface(baseMapper);
 
         /*
          * 删除不用的 Mapper 方法
@@ -155,17 +166,17 @@ public class CustomPlugin extends PluginAdapter {
                 introspectedTable.getInsertSelectiveStatementId());
         for (Iterator<Method> it = interfaze.getMethods().iterator(); it.hasNext(); ) {
             Method e = it.next();
-
-            boolean keep = false;
-            for (String keepId : keepIdList) {
-                if (e.getName().equals(keepId)) {
-                    keep = true;
-                    break;
-                }
-            }
-            if (keep) {
-                continue;
-            }
+//
+//            boolean keep = false;
+//            for (String keepId : keepIdList) {
+//                if (e.getName().equals(keepId)) {
+//                    keep = true;
+//                    break;
+//                }
+//            }
+//            if (keep) {
+//                continue;
+//            }
 
             log.info("删除 {} client: {}", introspectedTable.getTableConfiguration().getTableName(), e.getName());
 
@@ -175,25 +186,25 @@ public class CustomPlugin extends PluginAdapter {
         /*
          * 添加自定义的 Mapper 方法
          */
-        for (java.lang.reflect.Method m : Runner.getSortedMethod(runner.getClass())) {
-            String prefix = Runner.CLIENT_METHOD_PREFIX;
-            if (m.getName().startsWith(prefix)) {
-                String methodName = GenUtils.firstCharToLower(m.getName().substring(prefix.length()));
-
-                log.info("生成 {} client: {}", introspectedTable.getTableConfiguration().getTableName(), methodName);
-
-                Method method = new Method(methodName);
-                method.setAbstract(true);
-                try {
-                    m.invoke(runner, interfaze, method, introspectedTable);
-                    interfaze.addMethod(method);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                } catch (InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+//        for (java.lang.reflect.Method m : Runner.getSortedMethod(runner.getClass())) {
+//            String prefix = Runner.CLIENT_METHOD_PREFIX;
+//            if (m.getName().startsWith(prefix)) {
+//                String methodName = GenUtils.firstCharToLower(m.getName().substring(prefix.length()));
+//
+//                log.info("生成 {} client: {}", introspectedTable.getTableConfiguration().getTableName(), methodName);
+//
+//                Method method = new Method(methodName);
+//                method.setAbstract(true);
+//                try {
+//                    m.invoke(runner, interfaze, method, introspectedTable);
+//                    interfaze.addMethod(method);
+//                } catch (IllegalAccessException e) {
+//                    throw new RuntimeException(e);
+//                } catch (InvocationTargetException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
 
         return true;
     }

@@ -84,11 +84,6 @@ public class Order extends BaseEntity<Long> implements java.io.Serializable {
      */
     private String address;
 
-    /**
-     * 是否删除，0：否，1：是
-     */
-    private Byte isDeleted;
-
     private static final long serialVersionUID = 1L;
 
     public String getOrderNo() {
@@ -123,14 +118,6 @@ public class Order extends BaseEntity<Long> implements java.io.Serializable {
         this.address = address;
     }
 
-    public Byte getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Byte isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -144,7 +131,7 @@ public class Order extends BaseEntity<Long> implements java.io.Serializable {
         sb.append(", address=").append(address);
         sb.append(", createTime=").append(super.getCreateTime());
         sb.append(", updateTime=").append(super.getUpdateTime());
-        sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", isDeleted=").append(super.getIsDeleted());
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -197,7 +184,7 @@ public class Order extends BaseEntity<Long> implements java.io.Serializable {
         this.address = null;
         // super.setCreateTime(null);
         // super.setUpdateTime(null);
-        this.isDeleted = null;
+        // super.setIsDeleted(null);
     }
 
     public static boolean isColumn(String column) {

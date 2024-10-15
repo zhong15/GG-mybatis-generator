@@ -87,7 +87,7 @@ public class DefaultRunner implements Runner {
         FullyQualifiedJavaType baseEntity = new FullyQualifiedJavaType(BaseEntity.class.getSimpleName());
         baseEntity.addTypeArgument(new FullyQualifiedJavaType(GenUtils.primaryKeyShortJavaType(introspectedTable)));
         topLevelClass.setSuperClass(baseEntity);
-        List<String> baseEntityFieldList = Arrays.asList("id", "createTime", "updateTime");
+        List<String> baseEntityFieldList = Arrays.asList("id", "createTime", "updateTime", "isDeleted");
         for (Iterator<Field> it = topLevelClass.getFields().iterator(); it.hasNext(); ) {
             Field e = it.next();
             if (baseEntityFieldList.contains(e.getName())) {

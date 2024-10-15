@@ -23,11 +23,13 @@ public class BaseEntity<T> implements Serializable {
     private T id;
     private Date createTime;
     private Date updateTime;
+    private Byte isDeleted;
 
     public void clear() {
         this.id = null;
         this.createTime = null;
         this.updateTime = null;
+        this.isDeleted = null;
     }
 
     public T getId() {
@@ -52,5 +54,13 @@ public class BaseEntity<T> implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Byte getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Byte isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
