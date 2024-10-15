@@ -61,6 +61,7 @@
       <if test="whereSql != null and whereSql.length() != 0">
         ${whereSql.toString()}
       </if>
+      AND is_deleted = 0
     </where>
   </sql>
   <sql id="sqlWhere2">
@@ -68,13 +69,14 @@
       <if test="where != null and where.whereSql != null and where.whereSql.length() != 0">
         ${where.whereSql.toString()}
       </if>
+      AND is_deleted = 0
     </where>
   </sql>
   <delete id="deleteById" parameterType="java.lang.Long">
-    DELETE FROM t_user WHERE id = #{id}
+    UPDATE t_user SET is_deleted = 1 WHERE id = #{id} AND is_deleted = 0
   </delete>
   <delete id="deleteByWhere" parameterType="gg.mybatis.generator.common.sql.Where">
-    DELETE FROM t_user
+    UPDATE t_user SET is_deleted = 1
     <include refid="sqlWhere" />
   </delete>
   <update id="updateById">
@@ -100,11 +102,12 @@
       </if>
       <if test="setNullColumnList != null and setNullColumnList.size() != 0">
         <foreach collection="setNullColumnList" item="column" separator=",">
-          ${column} = NULL,
+          ${column} = NULL
         </foreach>
       </if>
     </set>
     WHERE id = #{row.id,jdbcType=BIGINT}
+    AND is_deleted = 0
   </update>
   <update id="updateByWhere">
     UPDATE t_user
@@ -129,16 +132,14 @@
       </if>
       <if test="setNullColumnList != null and setNullColumnList.size() != 0">
         <foreach collection="setNullColumnList" item="column" separator=",">
-          ${column} = NULL,
+          ${column} = NULL
         </foreach>
       </if>
     </set>
     <include refid="sqlWhere2" />
   </update>
   <update id="updateColumnValueById">
-    UPDATE t_user
-    SET ${column} = #{value}
-    WHERE id = #{id}
+    UPDATE t_user SET ${column} = #{value} WHERE id = #{id} AND is_deleted = 0
   </update>
   <select id="selectById" resultMap="BaseResultMap">
     <if test="columnList == null or columnList.size() == 0">
@@ -152,6 +153,7 @@
       FROM t_user
     </if>
     WHERE id = #{id}
+    AND is_deleted = 0
   </select>
   <select id="selectByWhere" resultMap="BaseResultMap">
     <if test="columnList == null or columnList.size() == 0">

@@ -72,16 +72,7 @@ public abstract class AbstractWhere {
 
     @Override
     public String toString() {
-        if (whereSql == null) {
-            return "";
-        }
-        if (!addBrackets) {
-            return whereSql.toString();
-        }
-        whereSql.append(")");
-        String s = whereSql.toString();
-        whereSql.setLength(whereSql.length() - 1);
-        return s;
+        return whereSql == null ? "" : whereSql.toString();
     }
 
     protected void incrementBrackets() {
@@ -101,9 +92,21 @@ public abstract class AbstractWhere {
                 if (whereSql == null) {
                     whereSql = new StringBuilder();
                 }
-                whereSql.insert(0, "(");
+                whereSql.insert(0, "(").append(")");
             }
             addBrackets = true;
+        }
+    }
+
+    private void checkAddBracketsStart() {
+        if (addBrackets) {
+            whereSql.setLength(whereSql.length() - 1);
+        }
+    }
+
+    private void checkAddBracketsEnd() {
+        if (addBrackets) {
+            whereSql.append(")");
         }
     }
 
@@ -114,6 +117,7 @@ public abstract class AbstractWhere {
         if (whereSql == null) {
             whereSql = new StringBuilder();
         }
+        checkAddBracketsStart();
         if (whereSql.length() == 0
                 || whereSql.charAt(whereSql.length() - 1) == '('
                 || sql.equals(")")
@@ -122,6 +126,7 @@ public abstract class AbstractWhere {
             whereSql.append(" ");
         }
         whereSql.append(sql);
+        checkAddBracketsEnd();
     }
 
     protected void appendWhereSqlParam(Object param) {
@@ -137,6 +142,7 @@ public abstract class AbstractWhere {
         if (whereSql == null) {
             whereSql = new StringBuilder();
         }
+        checkAddBracketsStart();
         if (whereSql.length() == 0
                 || whereSql.charAt(whereSql.length() - 1) == '(') {
         } else {
@@ -147,5 +153,6 @@ public abstract class AbstractWhere {
             whereSql.append(whereParamName).append(".");
         }
         whereSql.append(PARAM_LIST).append("[").append(paramList.size() - 1).append("]}");
+        checkAddBracketsEnd();
     }
 }

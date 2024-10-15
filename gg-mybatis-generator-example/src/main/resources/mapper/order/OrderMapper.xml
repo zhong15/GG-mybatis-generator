@@ -66,13 +66,7 @@
   <sql id="sqlWhere">
     <where>
       <if test="whereSql != null and whereSql.length() != 0">
-        <if test="addBrackets != null and addBrackets">
-          (
-        </if>
         ${whereSql.toString()}
-        <if test="addBrackets != null and addBrackets">
-          )
-        </if>
       </if>
       AND is_deleted = 0
     </where>
@@ -80,13 +74,7 @@
   <sql id="sqlWhere2">
     <where>
       <if test="where != null and where.whereSql != null and where.whereSql.length() != 0">
-        <if test="where.addBrackets != null and where.addBrackets">
-          (
-        </if>
         ${where.whereSql.toString()}
-        <if test="where.addBrackets != null and where.addBrackets">
-          )
-        </if>
       </if>
       AND is_deleted = 0
     </where>
@@ -124,7 +112,7 @@
       </if>
       <if test="setNullColumnList != null and setNullColumnList.size() != 0">
         <foreach collection="setNullColumnList" item="column" separator=",">
-          ${column} = NULL,
+          ${column} = NULL
         </foreach>
       </if>
     </set>
@@ -157,17 +145,14 @@
       </if>
       <if test="setNullColumnList != null and setNullColumnList.size() != 0">
         <foreach collection="setNullColumnList" item="column" separator=",">
-          ${column} = NULL,
+          ${column} = NULL
         </foreach>
       </if>
     </set>
     <include refid="sqlWhere2" />
   </update>
   <update id="updateColumnValueById">
-    UPDATE t_order
-    SET ${column} = #{value}
-    WHERE id = #{id}
-    AND is_deleted = 0
+    UPDATE t_order SET ${column} = #{value} WHERE id = #{id} AND is_deleted = 0
   </update>
   <select id="selectById" resultMap="BaseResultMap">
     <if test="columnList == null or columnList.size() == 0">
