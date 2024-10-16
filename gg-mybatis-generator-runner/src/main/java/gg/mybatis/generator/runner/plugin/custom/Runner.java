@@ -17,8 +17,6 @@
 package gg.mybatis.generator.runner.plugin.custom;
 
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
@@ -31,7 +29,7 @@ import java.util.*;
  */
 public interface Runner {
     String SQL_MAP_METHOD_PREFIX = "sqlMap";
-    String CLIENT_METHOD_PREFIX = "client";
+//    String CLIENT_METHOD_PREFIX = "client";
 
     static List<java.lang.reflect.Method> getSortedMethod(Class<?> clazz) {
         List<String> nameList = Arrays.asList("Sql", "Delete", "Update", "Select", "Count");
@@ -41,8 +39,8 @@ public interface Runner {
         outer:
         for (java.lang.reflect.Method e : clazz.getMethods()) {
             for (String s : nameList) {
-                if (e.getName().startsWith(Runner.CLIENT_METHOD_PREFIX + s)
-                        || e.getName().startsWith(Runner.SQL_MAP_METHOD_PREFIX + s)) {
+                if (/*e.getName().startsWith(Runner.CLIENT_METHOD_PREFIX + s)
+                        || */e.getName().startsWith(Runner.SQL_MAP_METHOD_PREFIX + s)) {
                     continue outer;
                 }
             }
@@ -53,8 +51,8 @@ public interface Runner {
         for (String s : nameList) {
             map.clear();
             for (java.lang.reflect.Method e : clazz.getMethods()) {
-                if (e.getName().startsWith(Runner.CLIENT_METHOD_PREFIX + s)
-                        || e.getName().startsWith(Runner.SQL_MAP_METHOD_PREFIX + s)) {
+                if (/*e.getName().startsWith(Runner.CLIENT_METHOD_PREFIX + s)
+                        || */e.getName().startsWith(Runner.SQL_MAP_METHOD_PREFIX + s)) {
                     map.put(e.getName(), e);
                 }
             }
@@ -72,39 +70,39 @@ public interface Runner {
 
     void sqlMapSqlWhere2(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientDeleteById(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientDeleteById(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapDeleteById(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientDeleteByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientDeleteByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapDeleteByWhere(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientUpdateById(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientUpdateById(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapUpdateById(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientUpdateColumnValueById(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientUpdateColumnValueById(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapUpdateColumnValueById(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientUpdateByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientUpdateByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapUpdateByWhere(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientSelectById(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientSelectById(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapSelectById(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientSelectByWherePageIdIn(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientSelectByWherePageIdIn(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapSelectByWherePageIdIn(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientSelectByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientSelectByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapSelectByWhere(XmlElement element, IntrospectedTable introspectedTable);
 
-    void clientCountByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
+//    void clientCountByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapCountByWhere(XmlElement element, IntrospectedTable introspectedTable);
 }

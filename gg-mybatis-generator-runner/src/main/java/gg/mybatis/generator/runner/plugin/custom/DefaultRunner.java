@@ -255,11 +255,11 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientDeleteById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(GenUtils.parameter(GenUtils.primaryKeyShortJavaType(introspectedTable), "id", null));
-    }
+//    @Override
+//    public void clientDeleteById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        method.setReturnType(new FullyQualifiedJavaType("int"));
+//        method.addParameter(GenUtils.parameter(GenUtils.primaryKeyShortJavaType(introspectedTable), "id", null));
+//    }
 
     @Override
     public void sqlMapDeleteById(XmlElement element, IntrospectedTable introspectedTable) {
@@ -271,12 +271,12 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientDeleteByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-        method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(GenUtils.parameter(WHERE_CLASS_SIMPLE_NAME, "where", null));
-    }
+//    @Override
+//    public void clientDeleteByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
+//        method.setReturnType(new FullyQualifiedJavaType("int"));
+//        method.addParameter(GenUtils.parameter(WHERE_CLASS_SIMPLE_NAME, "where", null));
+//    }
 
     @Override
     public void sqlMapDeleteByWhere(XmlElement element, IntrospectedTable introspectedTable) {
@@ -287,12 +287,12 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientUpdateById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(GenUtils.parameterAndAnnotation(introspectedTable.getBaseRecordType(), "row"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "setNullColumnList"));
-    }
+//    @Override
+//    public void clientUpdateById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        method.setReturnType(new FullyQualifiedJavaType("int"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(introspectedTable.getBaseRecordType(), "row"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "setNullColumnList"));
+//    }
 
     @Override
     public void sqlMapUpdateById(XmlElement element, IntrospectedTable introspectedTable) {
@@ -305,13 +305,13 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientUpdateColumnValueById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.primaryKeyShortJavaType(introspectedTable), "id"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "column"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Object"), "value"));
-    }
+//    @Override
+//    public void clientUpdateColumnValueById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        method.setReturnType(new FullyQualifiedJavaType("int"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.primaryKeyShortJavaType(introspectedTable), "id"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "column"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Object"), "value"));
+//    }
 
     @Override
     public void sqlMapUpdateColumnValueById(XmlElement element, IntrospectedTable introspectedTable) {
@@ -321,14 +321,14 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientUpdateByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-        method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(GenUtils.parameterAndAnnotation(introspectedTable.getBaseRecordType(), "row"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "setNullColumnList"));
-        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
-    }
+//    @Override
+//    public void clientUpdateByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
+//        method.setReturnType(new FullyQualifiedJavaType("int"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(introspectedTable.getBaseRecordType(), "row"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "setNullColumnList"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
+//    }
 
     @Override
     public void sqlMapUpdateByWhere(XmlElement element, IntrospectedTable introspectedTable) {
@@ -340,13 +340,13 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientSelectById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-        method.setReturnType(GenUtils.javaType(introspectedTable.getBaseRecordType()));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.primaryKeyShortJavaType(introspectedTable), "id"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
-    }
+//    @Override
+//    public void clientSelectById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
+//        method.setReturnType(GenUtils.javaType(introspectedTable.getBaseRecordType()));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.primaryKeyShortJavaType(introspectedTable), "id"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
+//    }
 
     @Override
     public void sqlMapSelectById(XmlElement element, IntrospectedTable introspectedTable) {
@@ -358,16 +358,16 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientSelectByWherePageIdIn(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-        method.setReturnType(GenUtils.javaType("List", introspectedTable.getBaseRecordType()));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
-        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "orderBy"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType(/*Long*/"long"), "offset"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType(/*"Integer"*/"int"), "rowCount"));
-    }
+//    @Override
+//    public void clientSelectByWherePageIdIn(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
+//        method.setReturnType(GenUtils.javaType("List", introspectedTable.getBaseRecordType()));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "orderBy"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType(/*Long*/"long"), "offset"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType(/*"Integer"*/"int"), "rowCount"));
+//    }
 
     @Override
     public void sqlMapSelectByWherePageIdIn(XmlElement element, IntrospectedTable introspectedTable) {
@@ -379,17 +379,17 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientSelectByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-        method.setReturnType(GenUtils.javaType("List", introspectedTable.getBaseRecordType()));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Boolean"), "distinct"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
-        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "orderBy"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Long"), "offset"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Integer"), "rowCount"));
-    }
+//    @Override
+//    public void clientSelectByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
+//        method.setReturnType(GenUtils.javaType("List", introspectedTable.getBaseRecordType()));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Boolean"), "distinct"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "orderBy"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Long"), "offset"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Integer"), "rowCount"));
+//    }
 
     @Override
     public void sqlMapSelectByWhere(XmlElement element, IntrospectedTable introspectedTable) {
@@ -400,14 +400,14 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-    @Override
-    public void clientCountByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-        method.setReturnType(new FullyQualifiedJavaType("long"));
-        method.addParameter(GenUtils.parameterAndAnnotation("Boolean", "distinct"));
-        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
-        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
-    }
+//    @Override
+//    public void clientCountByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
+//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
+//        method.setReturnType(new FullyQualifiedJavaType("long"));
+//        method.addParameter(GenUtils.parameterAndAnnotation("Boolean", "distinct"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
+//        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
+//    }
 
     @Override
     public void sqlMapCountByWhere(XmlElement element, IntrospectedTable introspectedTable) {
