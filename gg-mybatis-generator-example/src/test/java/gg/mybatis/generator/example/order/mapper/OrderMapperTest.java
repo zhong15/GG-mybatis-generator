@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author Zhong
@@ -510,6 +511,53 @@ public class OrderMapperTest {
         order1_2.setId(order1.getId());
         order1_2.setOrderNo(order1.getOrderNo());
         Assert.assertEquals(order1_1, order1_2);
+    }
+
+    @Test
+    public void test_selectByIdList() {
+        // @Param("idList") List<ID> idList, @Param("columnList") List<String> columnList
+
+        // 测试用例：插入 3 条数据，执行查询：第 1、3 个数据 ID, null
+        // 期望结果：查出第 1、3 条数据所有列
+        Order order1 = test_insertSelective_core(1, 1);
+        Order order2 = test_insertSelective_core(2, 2);
+        Order order3 = test_insertSelective_core(3, 3);
+
+        List<Order> orderList = orderMapper.selectByIdList(Arrays.asList(order1.getId(), order3.getId()), null);
+
+        Assert.assertNotNull(orderList);
+        Assert.assertEquals(orderList.size(), 2);
+        Map<Long, Order> orderMap = orderList.stream().collect(Collectors.toMap(Order::getId, Function.identity()));
+
+        Assert.assertEquals(order1, orderMap.get(order1.getId()));
+        Assert.assertEquals(order3, orderMap.get(order3.getId()));
+    }
+
+    @Test
+    public void test_selectByIdList_2() {
+        // @Param("idList") List<ID> idList, @Param("columnList") List<String> columnList
+
+        // 测试用例：插入 3 条数据，执行查询：第 1、3 个数据 ID, id orderNo
+        // 期望结果：查出第 1、3 条数据 id orderNo，其它列为 null
+        Order order1 = test_insertSelective_core(1, 1);
+        Order order2 = test_insertSelective_core(2, 2);
+        Order order3 = test_insertSelective_core(3, 3);
+
+        List<Order> orderList = orderMapper.selectByIdList(Arrays.asList(order1.getId(), order3.getId()), Arrays.asList(Order.ID_long, Order.ORDER_NO_str));
+
+        Assert.assertNotNull(orderList);
+        Assert.assertEquals(orderList.size(), 2);
+        Map<Long, Order> orderMap = orderList.stream().collect(Collectors.toMap(Order::getId, Function.identity()));
+
+        Order order1_2 = new Order();
+        order1_2.setId(order1.getId());
+        order1_2.setOrderNo(order1.getOrderNo());
+        Assert.assertEquals(orderMap.get(order1.getId()), order1_2);
+
+        Order order3_2 = new Order();
+        order3_2.setId(order3.getId());
+        order3_2.setOrderNo(order3.getOrderNo());
+        Assert.assertEquals(orderMap.get(order3.getId()), order3_2);
     }
 
     @Test

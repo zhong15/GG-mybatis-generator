@@ -168,6 +168,23 @@
     WHERE id = #{id}
     AND is_deleted = 0
   </select>
+  <select id="selectByIdList" resultMap="BaseResultMap">
+    <if test="columnList == null or columnList.size() == 0">
+      SELECT * FROM t_order
+    </if>
+    <if test="columnList != null and columnList.size() != 0">
+      SELECT
+      <foreach collection="columnList" item="column" separator=",">
+        ${column}
+      </foreach>
+      FROM t_order
+    </if>
+    WHERE id IN
+    <foreach collection="idList" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+    AND is_deleted = 0
+  </select>
   <select id="selectByWhere" resultMap="BaseResultMap">
     <if test="columnList == null or columnList.size() == 0">
       SELECT * FROM t_order

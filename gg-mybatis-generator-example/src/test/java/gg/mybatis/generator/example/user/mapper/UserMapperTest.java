@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author Zhong
@@ -503,6 +504,53 @@ public class UserMapperTest {
         user1_2.setId(user1.getId());
         user1_2.setEmail(user1.getEmail());
         Assert.assertEquals(user1_1, user1_2);
+    }
+
+    @Test
+    public void test_selectByIdList() {
+        // @Param("idList") List<T> idList, @Param("columnList") List<String> columnList
+
+        // 测试用例：插入 3 条数据，执行查询：第 1、3 个数据 ID, null
+        // 期望结果：查出第 1、3 条数据所有列
+        User user1 = test_insertSelective_core(1, 1);
+        User user2 = test_insertSelective_core(2, 2);
+        User user3 = test_insertSelective_core(3, 3);
+
+        List<User> userList = userMapper.selectByIdList(Arrays.asList(user1.getId(), user3.getId()), null);
+
+        Assert.assertNotNull(userList);
+        Assert.assertEquals(userList.size(), 2);
+        Map<Long, User> userMap = userList.stream().collect(Collectors.toMap(User::getId, Function.identity()));
+
+        Assert.assertEquals(user1, userMap.get(user1.getId()));
+        Assert.assertEquals(user3, userMap.get(user3.getId()));
+    }
+
+    @Test
+    public void test_selectByIdList_2() {
+        // @Param("idList") List<T> idList, @Param("columnList") List<String> columnList
+
+        // 测试用例：插入 3 条数据，执行查询：第 1、3 个数据 ID, id email
+        // 期望结果：查出第 1、3 条数据 id email，其它列为 null
+        User user1 = test_insertSelective_core(1, 1);
+        User user2 = test_insertSelective_core(2, 2);
+        User user3 = test_insertSelective_core(3, 3);
+
+        List<User> userList = userMapper.selectByIdList(Arrays.asList(user1.getId(), user3.getId()), Arrays.asList(User.ID_long, User.EMAIL_str));
+
+        Assert.assertNotNull(userList);
+        Assert.assertEquals(userList.size(), 2);
+        Map<Long, User> userMap = userList.stream().collect(Collectors.toMap(User::getId, Function.identity()));
+
+        User user1_2 = new User();
+        user1_2.setId(user1.getId());
+        user1_2.setEmail(user1.getEmail());
+        Assert.assertEquals(userMap.get(user1.getId()), user1_2);
+
+        User user3_2 = new User();
+        user3_2.setId(user3.getId());
+        user3_2.setEmail(user3.getEmail());
+        Assert.assertEquals(userMap.get(user3.getId()), user3_2);
     }
 
     @Test
