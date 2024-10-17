@@ -94,6 +94,8 @@ public interface Runner {
 
     void sqlMapSelectById(XmlElement element, IntrospectedTable introspectedTable);
 
+    void sqlMapSelectByIdList(XmlElement element, IntrospectedTable introspectedTable);
+
 //    void clientSelectByWherePageIdIn(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapSelectByWherePageIdIn(XmlElement element, IntrospectedTable introspectedTable);

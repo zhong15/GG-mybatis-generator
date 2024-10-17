@@ -90,6 +90,15 @@ public interface BaseMapper<T extends BaseEntity<ID>, ID> {
     T selectById(@Param("id") ID id, @Param("columnList") List<String> columnList);
 
     /**
+     * 查询根据多个 ID
+     *
+     * @param idList     主键
+     * @param columnList SELECT 的字段，允许 null
+     * @return null 如果记录不存在
+     */
+    List<T> selectByIdList(@Param("idList") List<ID> idList, @Param("columnList") List<String> columnList);
+
+    /**
      * 分页查询根据 Where，此方法深度分页效率较低
      *
      * @param distinct   是否去重，只有 columnList 有值才起作用，允许 null

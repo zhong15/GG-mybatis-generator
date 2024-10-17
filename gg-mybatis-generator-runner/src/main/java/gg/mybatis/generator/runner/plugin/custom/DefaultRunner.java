@@ -358,6 +358,16 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
+    @Override
+    public void sqlMapSelectByIdList(XmlElement element, IntrospectedTable introspectedTable) {
+        element.addAttribute(new Attribute("resultMap", introspectedTable.getBaseResultMapId()));
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("tableName", introspectedTable.getTableConfiguration().getTableName());
+        map.put("pk", GenUtils.primaryKey(introspectedTable));
+        tpl(element, map);
+    }
+
 //    @Override
 //    public void clientSelectByWherePageIdIn(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
 //        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
