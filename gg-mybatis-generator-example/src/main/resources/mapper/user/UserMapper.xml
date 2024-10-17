@@ -64,20 +64,16 @@
     </trim>
   </insert>
   <sql id="sqlWhere">
-    <where>
-      <if test="whereSql != null and whereSql.length() != 0">
-        ${whereSql.toString()}
-      </if>
-      AND is_deleted = 0
-    </where>
+    WHERE is_deleted = 0
+    <if test="whereSql != null and whereSql.length() != 0">
+      AND ${whereSql.toString()}
+    </if>
   </sql>
   <sql id="sqlWhere2">
-    <where>
-      <if test="where != null and where.whereSql != null and where.whereSql.length() != 0">
-        ${where.whereSql.toString()}
-      </if>
-      AND is_deleted = 0
-    </where>
+    WHERE is_deleted = 0
+    <if test="where != null and where.whereSql != null and where.whereSql.length() != 0">
+      AND ${where.whereSql.toString()}
+    </if>
   </sql>
   <delete id="deleteById" parameterType="java.lang.Long">
     UPDATE t_user SET is_deleted = 1 WHERE id = #{id} AND is_deleted = 0
