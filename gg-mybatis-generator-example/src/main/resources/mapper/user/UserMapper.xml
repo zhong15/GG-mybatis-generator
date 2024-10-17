@@ -82,6 +82,13 @@
   <delete id="deleteById" parameterType="java.lang.Long">
     UPDATE t_user SET is_deleted = 1 WHERE id = #{id} AND is_deleted = 0
   </delete>
+  <delete id="deleteByIdList" parameterType="java.util.List">
+    UPDATE t_user SET is_deleted = 1 WHERE id IN
+    <foreach collection="arg0" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+    AND is_deleted = 0
+  </delete>
   <delete id="deleteByWhere" parameterType="gg.mybatis.generator.common.sql.Where">
     UPDATE t_user SET is_deleted = 1
     <include refid="sqlWhere" />

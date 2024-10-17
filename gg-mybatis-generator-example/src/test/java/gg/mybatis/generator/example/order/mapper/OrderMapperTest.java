@@ -182,6 +182,50 @@ public class OrderMapperTest {
     }
 
     @Test
+    public void test_deleteByIdList() {
+        // List<ID> idList
+
+        // 测试用例：插入 3 条数据，然后根据 ID 删除第 1、3 条数据
+        // 期望结果：
+        //      插入第 1 条数据：获取 ID_1
+        //      插入第 2 条数据：获取 ID_2
+        //      插入第 3 条数据：获取 ID_3
+        //      根据 ID_1、ID_3 删除第 1、3 条数据：总数 2
+        //      根据 ID_1 查询第 1 条数据：不存在
+        //      根据 ID_2 查询第 2 条数据：存在
+        //      根据 ID_3 查询第 3 条数据：不存在
+
+        // 第 1 次插入
+        final long id_1 = test_insertSelective_core(1, 1).getId();
+
+        // 第 2 次插入
+        final long id_2 = test_insertSelective_core(2, 2).getId();
+
+        // 第 3 次插入
+        final long id_3 = test_insertSelective_core(3, 3).getId();
+
+        // 执行删除 id_1、id_3
+        int rows = orderMapper.deleteByIdList(Arrays.asList(id_1, id_3));
+        Assert.assertEquals(rows, 2);
+
+        // 查询 id_1 记录 = null
+        Order order = orderMapper.selectById(id_1, null);
+        Assert.assertNull(order);
+
+        // 查询 id_2 记录 != null
+        order = orderMapper.selectById(id_2, null);
+        Assert.assertNotNull(order);
+
+        // 查询 id_3 记录 = null
+        order = orderMapper.selectById(id_3, null);
+        Assert.assertNull(order);
+
+        // 总数 = 1
+        long count = orderMapper.countByWhere(null, null, null);
+        Assert.assertEquals(count, 1L);
+    }
+
+    @Test
     public void test_deleteByWhere() {
         // Where where
 
