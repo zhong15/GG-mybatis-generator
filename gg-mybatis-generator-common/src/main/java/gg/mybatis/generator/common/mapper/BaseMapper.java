@@ -44,6 +44,14 @@ public interface BaseMapper<T extends BaseEntity<ID>, ID> {
     int deleteById(ID id);
 
     /**
+     * 删除根据多个 ID
+     *
+     * @param idList 多个主键
+     * @return 非 0 如果删除成功
+     */
+    int deleteByIdList(List<ID> idList);
+
+    /**
      * 删除根据 Where
      *
      * @param where WHERE 条件，Where 必须先调用 .withoutParamAnnotation()，null 删除所有

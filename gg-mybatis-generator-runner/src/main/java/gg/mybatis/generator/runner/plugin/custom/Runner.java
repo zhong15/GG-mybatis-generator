@@ -74,6 +74,8 @@ public interface Runner {
 
     void sqlMapDeleteById(XmlElement element, IntrospectedTable introspectedTable);
 
+    void sqlMapDeleteByIdList(XmlElement element, IntrospectedTable introspectedTable);
+
 //    void clientDeleteByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable);
 
     void sqlMapDeleteByWhere(XmlElement element, IntrospectedTable introspectedTable);

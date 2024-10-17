@@ -271,6 +271,16 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
+    @Override
+    public void sqlMapDeleteByIdList(XmlElement element, IntrospectedTable introspectedTable) {
+        element.addAttribute(new Attribute("parameterType", List.class.getName()));
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("tableName", introspectedTable.getTableConfiguration().getTableName());
+        map.put("pk", GenUtils.primaryKey(introspectedTable));
+        tpl(element, map);
+    }
+
 //    @Override
 //    public void clientDeleteByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
 //        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
