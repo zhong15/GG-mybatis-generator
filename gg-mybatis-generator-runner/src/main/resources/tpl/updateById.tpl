@@ -11,5 +11,4 @@
         </foreach>
       </if>
     </set>
-    WHERE ${pk.actualColumnName} = <#noparse>#{row.</#noparse>${pk.javaProperty},jdbcType=${pk.jdbcTypeName}}
-    AND is_deleted = 0
+    WHERE is_deleted = 0 AND ${pk.actualColumnName} = <#noparse>#{row.</#noparse>${pk.javaProperty},jdbcType=${pk.jdbcTypeName}}

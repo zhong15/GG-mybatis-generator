@@ -8,5 +8,4 @@
       </foreach>
       FROM ${tableName}
     </if>
-    WHERE ${pk.actualColumnName} = <#noparse>#{id}</#noparse>
-    AND is_deleted = 0
+    WHERE is_deleted = 0 AND ${pk.actualColumnName} = <#noparse>#{id}</#noparse>

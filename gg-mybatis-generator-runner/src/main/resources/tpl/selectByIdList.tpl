@@ -8,8 +8,7 @@
       </foreach>
       FROM ${tableName}
     </if>
-    WHERE ${pk.actualColumnName} IN
+    WHERE is_deleted = 0 AND ${pk.actualColumnName} IN
       <foreach collection="idList" item="id" open="(" close=")" separator=",">
         <#noparse>#{id}</#noparse>
       </foreach>
-    AND is_deleted = 0
