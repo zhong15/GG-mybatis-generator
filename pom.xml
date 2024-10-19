@@ -24,6 +24,7 @@
 		<version.powermock-module-junit4>2.0.9</version.powermock-module-junit4>
 		<version.powermock-api-mockito2>2.0.9</version.powermock-api-mockito2>
 		<version.mockito-core>2.8.47</version.mockito-core>
+		<version.mybatis>3.5.13</version.mybatis>
 		<version.mybatis-generator-core>1.4.2</version.mybatis-generator-core>
 		<version.mybatis-generator-maven-plugin>1.4.2</version.mybatis-generator-maven-plugin>
 		<version.freemarker>2.3.30</version.freemarker>
