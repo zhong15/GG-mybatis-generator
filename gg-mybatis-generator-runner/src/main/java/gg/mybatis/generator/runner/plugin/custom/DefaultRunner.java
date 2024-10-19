@@ -97,11 +97,16 @@ public class DefaultRunner implements Runner {
         FullyQualifiedJavaType baseEntity = new FullyQualifiedJavaType(BaseEntity.class.getSimpleName());
         topLevelClass.setSuperClass(baseEntity);
         List<String> baseEntityFieldList = Arrays.asList("id", "createTime", "updateTime", "isDeleted");
+        int removeNumber = 0;
         for (Iterator<Field> it = topLevelClass.getFields().iterator(); it.hasNext(); ) {
             Field e = it.next();
             if (baseEntityFieldList.contains(e.getName())) {
                 it.remove();
+                removeNumber++;
             }
+        }
+        if (removeNumber != baseEntityFieldList.size()) {
+            throw new UnsupportedOperationException("必须存在字段：" + baseEntityFieldList.stream().collect(Collectors.joining(", ")));
         }
         for (Iterator<Method> it = topLevelClass.getMethods().iterator(); it.hasNext(); ) {
             Method e = it.next();
