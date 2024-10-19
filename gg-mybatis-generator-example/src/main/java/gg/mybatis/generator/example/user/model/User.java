@@ -23,7 +23,7 @@ import gg.mybatis.generator.common.domain.BaseEntity;
  * <p>
  * t_user
  */
-public class User extends BaseEntity<Long> implements java.io.Serializable {
+public class User extends BaseEntity implements java.io.Serializable {
     /**
      * 主键，类型：Long
      */

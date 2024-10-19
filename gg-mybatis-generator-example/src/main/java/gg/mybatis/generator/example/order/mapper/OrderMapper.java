@@ -26,5 +26,5 @@ import org.apache.ibatis.annotations.Mapper;
  * t_order
  */
 @Mapper
-public interface OrderMapper extends BaseMapper<Order, Long> {
+public interface OrderMapper extends BaseMapper<Order> {
 }

@@ -26,7 +26,7 @@ import java.util.List;
  * @author Zhong
  * @since 0.0.2
  */
-public interface BaseMapper<T extends BaseEntity<ID>, ID> {
+public interface BaseMapper<T extends BaseEntity> {
     /**
      * insert 记录
      *
@@ -41,7 +41,7 @@ public interface BaseMapper<T extends BaseEntity<ID>, ID> {
      * @param id 主键
      * @return 1 如果删除成功
      */
-    int deleteById(ID id);
+    int deleteById(Long id);
 
     /**
      * 删除根据多个 ID
@@ -49,7 +49,7 @@ public interface BaseMapper<T extends BaseEntity<ID>, ID> {
      * @param idList 多个主键
      * @return 非 0 如果删除成功
      */
-    int deleteByIdList(List<ID> idList);
+    int deleteByIdList(List<Long> idList);
 
     /**
      * 删除根据 Where
@@ -86,7 +86,7 @@ public interface BaseMapper<T extends BaseEntity<ID>, ID> {
      * @param value  值
      * @return 1 如果更新成功
      */
-    int updateColumnValueById(@Param("id") ID id, @Param("column") String column, @Param("value") Object value);
+    int updateColumnValueById(@Param("id") Long id, @Param("column") String column, @Param("value") Object value);
 
     /**
      * 查询根据 ID
@@ -95,7 +95,7 @@ public interface BaseMapper<T extends BaseEntity<ID>, ID> {
      * @param columnList SELECT 的字段，允许 null
      * @return null 如果记录不存在
      */
-    T selectById(@Param("id") ID id, @Param("columnList") List<String> columnList);
+    T selectById(@Param("id") Long id, @Param("columnList") List<String> columnList);
 
     /**
      * 查询根据多个 ID
@@ -104,7 +104,7 @@ public interface BaseMapper<T extends BaseEntity<ID>, ID> {
      * @param columnList SELECT 的字段，允许 null
      * @return null 如果记录不存在
      */
-    List<T> selectByIdList(@Param("idList") List<ID> idList, @Param("columnList") List<String> columnList);
+    List<T> selectByIdList(@Param("idList") List<Long> idList, @Param("columnList") List<String> columnList);
 
     /**
      * 分页查询根据 Where，此方法深度分页效率较低

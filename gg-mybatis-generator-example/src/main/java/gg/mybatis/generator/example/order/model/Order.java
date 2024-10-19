@@ -23,7 +23,7 @@ import gg.mybatis.generator.common.domain.BaseEntity;
  * <p>
  * t_order
  */
-public class Order extends BaseEntity<Long> implements java.io.Serializable {
+public class Order extends BaseEntity implements java.io.Serializable {
     /**
      * 主键，类型：Long
      */

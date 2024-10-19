@@ -26,5 +26,5 @@ import org.apache.ibatis.annotations.Mapper;
  * t_user
  */
 @Mapper
-public interface UserMapper extends BaseMapper<User, Long> {
+public interface UserMapper extends BaseMapper<User> {
 }

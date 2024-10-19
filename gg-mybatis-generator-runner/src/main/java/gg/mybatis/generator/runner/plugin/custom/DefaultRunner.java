@@ -81,11 +81,20 @@ public class DefaultRunner implements Runner {
     @Override
     public void modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         /*
+         * 检查主键是否是 Long id
+         */
+        if (!Objects.equals(GenUtils.primaryKeyFullJavaType(introspectedTable), Long.class.getName())) {
+            throw new UnsupportedOperationException("主键必须是 " + Long.class.getName());
+        }
+        if (!Objects.equals(GenUtils.primaryKey(introspectedTable).getActualColumnName().toLowerCase(), "id")) {
+            throw new UnsupportedOperationException("主键必须是 id");
+        }
+
+        /*
          * 添加父类
          */
         topLevelClass.addImportedType(BaseEntity.class.getName());
         FullyQualifiedJavaType baseEntity = new FullyQualifiedJavaType(BaseEntity.class.getSimpleName());
-        baseEntity.addTypeArgument(new FullyQualifiedJavaType(GenUtils.primaryKeyShortJavaType(introspectedTable)));
         topLevelClass.setSuperClass(baseEntity);
         List<String> baseEntityFieldList = Arrays.asList("id", "createTime", "updateTime", "isDeleted");
         for (Iterator<Field> it = topLevelClass.getFields().iterator(); it.hasNext(); ) {

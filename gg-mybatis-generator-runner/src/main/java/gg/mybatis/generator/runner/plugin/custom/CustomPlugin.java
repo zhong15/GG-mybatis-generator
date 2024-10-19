@@ -156,7 +156,7 @@ public class CustomPlugin extends PluginAdapter {
         /*
          * 继承 BaseMapper 接口
          */
-        baseMapper = GenUtils.javaType("BaseMapper", introspectedTable.getBaseRecordType(), GenUtils.primaryKeyShortJavaType(introspectedTable));
+        baseMapper = GenUtils.javaType("BaseMapper", introspectedTable.getBaseRecordType());
         interfaze.addSuperInterface(baseMapper);
 
         /*

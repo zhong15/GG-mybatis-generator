@@ -31,7 +31,7 @@ import java.util.Date;
 public class BaseEntityTest {
     @Test
     public void test_clear() {
-        BaseEntity<Long> x = new BaseEntity<>();
+        BaseEntity x = new BaseEntity();
 
         Assert.assertNull(x.getId());
         Assert.assertNull(x.getCreateTime());
