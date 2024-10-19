@@ -122,7 +122,7 @@ int rows = userMapper.deleteByWhere(
  * <p>
  * t_user
  */
-public class User extends BaseEntity<Long> implements java.io.Serializable {
+public class User extends BaseEntity implements java.io.Serializable {
     // 数据库表字段常量，命名规则：字段名_Java类型
 
     /**
@@ -188,7 +188,7 @@ public class User extends BaseEntity<Long> implements java.io.Serializable {
  * t_user
  */
 @Mapper
-public interface UserMapper extends BaseMapper<User, Long> {
+public interface UserMapper extends BaseMapper<User> {
 }
 ```
 
@@ -215,6 +215,9 @@ public interface UserMapper extends BaseMapper<User, Long> {
   <delete id="deleteById" parameterType="java.lang.Long">
     ...
   </delete>
+  <delete id="deleteByIdList" parameterType="java.util.List">
+    ...
+  </delete>
   <delete id="deleteByWhere" parameterType="gg.mybatis.generator.common.sql.Where">
     ...
     <include refid="sqlWhere" />
@@ -230,6 +233,9 @@ public interface UserMapper extends BaseMapper<User, Long> {
     ...
   </update>
   <select id="selectById" resultMap="BaseResultMap">
+    ...
+  </select>
+  <select id="selectByIdList" resultMap="BaseResultMap">
     ...
   </select>
   <select id="selectByWhere" resultMap="BaseResultMap">
