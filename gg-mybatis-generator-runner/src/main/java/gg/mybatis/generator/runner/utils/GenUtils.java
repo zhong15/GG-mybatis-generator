@@ -93,7 +93,7 @@ public class GenUtils {
 
     public static Parameter parameterAndAnnotation(String simpleClazzName, String name) {
         return new Parameter(new FullyQualifiedJavaType(simpleClazzName), name,
-            "@Param(\"" + name + "\")");
+                "@Param(\"" + name + "\")");
     }
 
     public static Parameter parameterAndAnnotation(FullyQualifiedJavaType javaType, String name) {
