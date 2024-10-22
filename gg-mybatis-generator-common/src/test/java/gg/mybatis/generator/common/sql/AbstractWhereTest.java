@@ -39,6 +39,8 @@ public class AbstractWhereTest {
     private static final String COLUMN = "name";
     private static final String VALUE = "value";
     private static final String VALUE2 = "value2";
+    private static final String OR_OPEN = "(";
+    private static final String OR_CLOSE = ")";
 
     private static void assertSqlWhereException(Consumer<Where> consumer) {
         try {
@@ -72,9 +74,6 @@ public class AbstractWhereTest {
 
             field = PowerMockito.field(DefaultWhere.class, "whereSql");
             Assert.assertNull(field.get(where));
-
-            field = PowerMockito.field(DefaultWhere.class, "paramNumber");
-            Assert.assertEquals(field.get(where), 0);
 
             field = PowerMockito.field(DefaultWhere.class, "paramList");
             Assert.assertNull(field.get(where));
@@ -114,14 +113,12 @@ public class AbstractWhereTest {
             field = PowerMockito.field(DefaultWhere.class, "whereSql");
             StringBuilder whereSql = (StringBuilder) field.get(where);
             Assert.assertNotNull(whereSql);
-            Assert.assertEquals(whereSql.toString(), "(" + COLUMN + " = #{paramList[0]}) OR " + COLUMN + " = #{paramList[1]} OR (");
-
-            field = PowerMockito.field(DefaultWhere.class, "paramNumber");
-            Assert.assertEquals(field.get(where), 2);
+            Assert.assertEquals(whereSql.toString(), OR_OPEN + "(" + COLUMN + " = #{paramList[0]}) OR " + COLUMN + " = #{paramList[1]} OR (" + OR_CLOSE);
 
             field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
             Assert.assertNotNull(paramList);
+            Assert.assertEquals(paramList.size(), 2);
             Assert.assertEquals(paramList.get(0), VALUE);
             Assert.assertEquals(paramList.get(1), VALUE2);
         } catch (IllegalAccessException e) {
@@ -151,9 +148,6 @@ public class AbstractWhereTest {
             StringBuilder whereSql = (StringBuilder) field.get(where);
             Assert.assertNotNull(whereSql);
             Assert.assertEquals(whereSql.length(), 0);
-
-            field = PowerMockito.field(DefaultWhere.class, "paramNumber");
-            Assert.assertEquals(field.get(where), 0);
 
             field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -429,10 +423,7 @@ public class AbstractWhereTest {
         Where where = new DefaultWhere().eq(VALUE).eq(VALUE2);
         Assert.assertEquals(where.toString(), "= #{where.paramList[0]} = #{where.paramList[1]}");
         try {
-            Field field = PowerMockito.field(DefaultWhere.class, "paramNumber");
-            Assert.assertEquals(field.get(where), 2);
-
-            field = PowerMockito.field(DefaultWhere.class, "paramList");
+            Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
             Assert.assertNotNull(paramList);
             Assert.assertEquals(paramList.size(), 2);

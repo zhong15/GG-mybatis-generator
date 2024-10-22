@@ -39,6 +39,8 @@ public class DefaultWhereTest {
     private static final String COLUMN = "name";
     private static final String VALUE = "value";
     private static final String VALUE2 = "value2";
+    private static final String OR_OPEN = "(";
+    private static final String OR_CLOSE = ")";
 
     private static void assertSqlWhereException(Consumer<Where> consumer) {
         try {
@@ -93,7 +95,7 @@ public class DefaultWhereTest {
         where.col(COLUMN).eq(VALUE)
                 .or(COLUMN).eq(VALUE2);
 
-        Assert.assertEquals(where.toString(), COLUMN + " = #{paramList[0]} OR " + COLUMN + " = #{paramList[1]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " = #{paramList[0]} OR " + COLUMN + " = #{paramList[1]}" + OR_CLOSE);
         try {
             field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -195,7 +197,7 @@ public class DefaultWhereTest {
         //      addBrackets = true
         Where where = new DefaultWhere()
                 .or();
-        Assert.assertEquals(where.toString(), "OR");
+        Assert.assertEquals(where.toString(), OR_OPEN + "OR" + OR_CLOSE);
         Field field = PowerMockito.field(DefaultWhere.class, "addBrackets");
         try {
             Assert.assertEquals(field.get(where), true);
@@ -241,7 +243,7 @@ public class DefaultWhereTest {
         //      addBrackets = true
         Where where = new DefaultWhere()
                 .or(COLUMN);
-        Assert.assertEquals(where.toString(), "OR " + COLUMN);
+        Assert.assertEquals(where.toString(), OR_OPEN + "OR " + COLUMN + OR_CLOSE);
         Field field = PowerMockito.field(DefaultWhere.class, "addBrackets");
         try {
             Assert.assertEquals(field.get(where), true);
@@ -294,7 +296,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).eq(VALUE)
                 .or(COLUMN).eq(VALUE2);
-        Assert.assertEquals(where.toString(), COLUMN + " = #{where.paramList[0]} OR " + COLUMN + " = #{where.paramList[1]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " = #{where.paramList[0]} OR " + COLUMN + " = #{where.paramList[1]}" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -320,7 +322,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).neq(VALUE)
                 .or(COLUMN).neq(VALUE2);
-        Assert.assertEquals(where.toString(), COLUMN + " <> #{where.paramList[0]} OR " + COLUMN + " <> #{where.paramList[1]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " <> #{where.paramList[0]} OR " + COLUMN + " <> #{where.paramList[1]}" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -346,7 +348,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).lt(VALUE)
                 .or(COLUMN).lt(VALUE2);
-        Assert.assertEquals(where.toString(), COLUMN + " < #{where.paramList[0]} OR " + COLUMN + " < #{where.paramList[1]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " < #{where.paramList[0]} OR " + COLUMN + " < #{where.paramList[1]}" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -372,7 +374,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).lte(VALUE)
                 .or(COLUMN).lte(VALUE2);
-        Assert.assertEquals(where.toString(), COLUMN + " <= #{where.paramList[0]} OR " + COLUMN + " <= #{where.paramList[1]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " <= #{where.paramList[0]} OR " + COLUMN + " <= #{where.paramList[1]}" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -398,7 +400,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).gt(VALUE)
                 .or(COLUMN).gt(VALUE2);
-        Assert.assertEquals(where.toString(), COLUMN + " > #{where.paramList[0]} OR " + COLUMN + " > #{where.paramList[1]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " > #{where.paramList[0]} OR " + COLUMN + " > #{where.paramList[1]}" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -424,7 +426,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).gte(VALUE)
                 .or(COLUMN).gte(VALUE2);
-        Assert.assertEquals(where.toString(), COLUMN + " >= #{where.paramList[0]} OR " + COLUMN + " >= #{where.paramList[1]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " >= #{where.paramList[0]} OR " + COLUMN + " >= #{where.paramList[1]}" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -458,7 +460,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).between(VALUE, VALUE2)
                 .or(COLUMN).between(VALUE2, VALUE);
-        Assert.assertEquals(where.toString(), COLUMN + " BETWEEN #{where.paramList[0]} AND #{where.paramList[1]} OR " + COLUMN + " BETWEEN #{where.paramList[2]} AND #{where.paramList[3]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " BETWEEN #{where.paramList[0]} AND #{where.paramList[1]} OR " + COLUMN + " BETWEEN #{where.paramList[2]} AND #{where.paramList[3]}" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -504,7 +506,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).in(Arrays.asList(VALUE, VALUE2))
                 .or(COLUMN).in(Arrays.asList(VALUE2, VALUE));
-        Assert.assertEquals(where.toString(), COLUMN + " IN (#{where.paramList[0]}, #{where.paramList[1]}) OR " + COLUMN + " IN (#{where.paramList[2]}, #{where.paramList[3]})");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " IN (#{where.paramList[0]}, #{where.paramList[1]}) OR " + COLUMN + " IN (#{where.paramList[2]}, #{where.paramList[3]})" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
@@ -540,7 +542,7 @@ public class DefaultWhereTest {
         Where where = new DefaultWhere()
                 .col(COLUMN).like(VALUE)
                 .or(COLUMN).like(VALUE2);
-        Assert.assertEquals(where.toString(), COLUMN + " LIKE #{where.paramList[0]} OR " + COLUMN + " LIKE #{where.paramList[1]}");
+        Assert.assertEquals(where.toString(), OR_OPEN + COLUMN + " LIKE #{where.paramList[0]} OR " + COLUMN + " LIKE #{where.paramList[1]}" + OR_CLOSE);
         try {
             Field field = PowerMockito.field(DefaultWhere.class, "paramList");
             List<Object> paramList = (List<Object>) field.get(where);
