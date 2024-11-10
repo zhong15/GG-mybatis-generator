@@ -55,6 +55,17 @@ public class CustomPlugin extends PluginAdapter {
         /*
          * 删除不用的 Mapper 方法
          */
+        removeMethod(document, introspectedTable);
+
+        /*
+         * 添加自定义的 Mapper 方法
+         */
+        addMethod(document, introspectedTable);
+
+        return true;
+    }
+
+    private void removeMethod(Document document, IntrospectedTable introspectedTable) {
         List<String> keepIdList = Arrays.asList(
                 introspectedTable.getBaseResultMapId(),
                 introspectedTable.getInsertSelectiveStatementId());
@@ -80,10 +91,9 @@ public class CustomPlugin extends PluginAdapter {
             log.info("删除 {} sqlMap: {}", introspectedTable.getTableConfiguration().getTableName(), GenUtils.getAttrValue(x, "id"));
             it.remove();
         }
+    }
 
-        /*
-         * 添加自定义的 Mapper 方法
-         */
+    private void addMethod(Document document, IntrospectedTable introspectedTable) {
         for (java.lang.reflect.Method m : Runner.getSortedMethod(runner.getClass())) {
             String prefix = Runner.SQL_MAP_METHOD_PREFIX;
             if (m.getName().startsWith(prefix)) {
@@ -102,8 +112,6 @@ public class CustomPlugin extends PluginAdapter {
                 }
             }
         }
-
-        return true;
     }
 
     private static String getXmlElementType(String methodName, String methodNamePrefix) {
@@ -147,21 +155,35 @@ public class CustomPlugin extends PluginAdapter {
         /*
          * 删除、添加 Example 的 import
          */
-        interfaze.getImportedTypes().remove(new FullyQualifiedJavaType(introspectedTable.getExampleType()));
-        interfaze.getImportedTypes().remove(new FullyQualifiedJavaType("java.util.List"));
-        interfaze.getImportedTypes().remove(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
         FullyQualifiedJavaType baseMapper = new FullyQualifiedJavaType(BaseMapper.class.getName());
-        interfaze.getImportedTypes().add(baseMapper);
+        refactorImportClass(interfaze, introspectedTable, baseMapper);
 
         /*
          * 继承 BaseMapper 接口
          */
-        baseMapper = GenUtils.javaType("BaseMapper", introspectedTable.getBaseRecordType());
-        interfaze.addSuperInterface(baseMapper);
+        extendsBaseMapper(interfaze, introspectedTable, baseMapper);
 
         /*
          * 删除不用的 Mapper 方法
          */
+        removeMethod(interfaze, introspectedTable);
+
+        return true;
+    }
+
+    private void refactorImportClass(Interface interfaze, IntrospectedTable introspectedTable, FullyQualifiedJavaType baseMapper) {
+        interfaze.getImportedTypes().remove(new FullyQualifiedJavaType(introspectedTable.getExampleType()));
+        interfaze.getImportedTypes().remove(new FullyQualifiedJavaType("java.util.List"));
+        interfaze.getImportedTypes().remove(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
+        interfaze.getImportedTypes().add(baseMapper);
+    }
+
+    private void extendsBaseMapper(Interface interfaze, IntrospectedTable introspectedTable, FullyQualifiedJavaType baseMapper) {
+        baseMapper = GenUtils.javaType("BaseMapper", introspectedTable.getBaseRecordType());
+        interfaze.addSuperInterface(baseMapper);
+    }
+
+    private void removeMethod(Interface interfaze, IntrospectedTable introspectedTable) {
         List<String> keepIdList = Arrays.asList(
                 introspectedTable.getInsertSelectiveStatementId());
         for (Iterator<Method> it = interfaze.getMethods().iterator(); it.hasNext(); ) {
@@ -171,7 +193,5 @@ public class CustomPlugin extends PluginAdapter {
 
             it.remove();
         }
-
-        return true;
     }
 }
