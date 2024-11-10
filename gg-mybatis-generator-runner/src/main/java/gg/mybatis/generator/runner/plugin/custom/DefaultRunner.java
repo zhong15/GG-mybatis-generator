@@ -83,20 +83,55 @@ public class DefaultRunner implements Runner {
         /*
          * 检查主键是否是 Long id
          */
+        checkModelExistsLongId(introspectedTable);
+
+        /*
+         * 添加父类
+         */
+        List<String> baseEntityFieldList = Arrays.asList("id", "createTime", "updateTime", "isDeleted");
+        addSuperClassToModel(topLevelClass, baseEntityFieldList);
+
+        /*
+         * 添加字段注释
+         */
+        addCommentToModelProperty(topLevelClass, introspectedTable);
+
+        /*
+         * 添加列名
+         */
+        addColumnNameStaticPropertyToModel(topLevelClass, introspectedTable);
+
+        /**
+         * 添加 clear 方法
+         */
+        addClearMethodToModel(topLevelClass, introspectedTable, baseEntityFieldList);
+
+        /*
+         * 添加 isColumn 方法
+         */
+        addIsColumnMethodToModel(topLevelClass, introspectedTable);
+
+        // toString() 方法
+        addToStringMethodToModel(topLevelClass, baseEntityFieldList);
+
+        // 清理 import
+        cleanModelImportClass(topLevelClass);
+    }
+
+    private void checkModelExistsLongId(IntrospectedTable introspectedTable) {
         if (!Objects.equals(GenUtils.primaryKeyFullJavaType(introspectedTable), Long.class.getName())) {
             throw new UnsupportedOperationException("主键必须是 " + Long.class.getName());
         }
         if (!Objects.equals(GenUtils.primaryKey(introspectedTable).getActualColumnName().toLowerCase(), "id")) {
             throw new UnsupportedOperationException("主键必须是 id");
         }
+    }
 
-        /*
-         * 添加父类
-         */
+    private void addSuperClassToModel(TopLevelClass topLevelClass, List<String> baseEntityFieldList) {
         topLevelClass.addImportedType(BaseEntity.class.getName());
         FullyQualifiedJavaType baseEntity = new FullyQualifiedJavaType(BaseEntity.class.getSimpleName());
         topLevelClass.setSuperClass(baseEntity);
-        List<String> baseEntityFieldList = Arrays.asList("id", "createTime", "updateTime", "isDeleted");
+
         int removeNumber = 0;
         for (Iterator<Field> it = topLevelClass.getFields().iterator(); it.hasNext(); ) {
             Field e = it.next();
@@ -118,10 +153,9 @@ public class DefaultRunner implements Runner {
                 }
             }
         }
+    }
 
-        /*
-         * 添加字段注释
-         */
+    private void addCommentToModelProperty(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Map<String, String> comments = introspectedTable.getAllColumns().stream().collect(Collectors.toMap(IntrospectedColumn::getJavaProperty, IntrospectedColumn::getRemarks));
         for (Field e : topLevelClass.getFields()) {
             if (comments.get(e.getName()) == null || comments.get(e.getName()).trim().length() == 0) {
@@ -131,10 +165,9 @@ public class DefaultRunner implements Runner {
             e.addJavaDocLine(" * " + comments.get(e.getName()));
             e.addJavaDocLine(" */");
         }
+    }
 
-        /*
-         * 添加列名
-         */
+    private void addColumnNameStaticPropertyToModel(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         for (int i = introspectedTable.getAllColumns().size() - 1; i >= 0; i--) {
             IntrospectedColumn e = introspectedTable.getAllColumns().get(i);
 
@@ -157,10 +190,9 @@ public class DefaultRunner implements Runner {
             column.setInitializationString("\"" + e.getActualColumnName() + "\"");
             topLevelClass.getFields().add(0, column);
         }
+    }
 
-        /**
-         * 添加 clear 方法
-         */
+    private void addClearMethodToModel(TopLevelClass topLevelClass, IntrospectedTable introspectedTable, List<String> baseEntityFieldList) {
         Method clear = new Method("clear");
         clear.addAnnotation("@Override");
         clear.setVisibility(JavaVisibility.PUBLIC);
@@ -174,10 +206,9 @@ public class DefaultRunner implements Runner {
             }
         }
         topLevelClass.addMethod(clear);
+    }
 
-        /*
-         * 添加 isColumn 方法
-         */
+    private void addIsColumnMethodToModel(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         Method isColumn = new Method("isColumn");
         isColumn.setVisibility(JavaVisibility.PUBLIC);
         isColumn.setStatic(true);
@@ -194,8 +225,9 @@ public class DefaultRunner implements Runner {
                     + (i == introspectedTable.getAllColumns().size() - 1 ? ";" : ""));
         }
         topLevelClass.addMethod(isColumn);
+    }
 
-        // toString() 方法
+    private void addToStringMethodToModel(TopLevelClass topLevelClass, List<String> baseEntityFieldList) {
         Method toString = null;
         for (Method e : topLevelClass.getMethods()) {
             if (!e.isStatic() && e.getName().equals("toString") && CollectionUtils.isEmpty(e.getParameters())) {
@@ -215,8 +247,9 @@ public class DefaultRunner implements Runner {
                 }
             }
         }
+    }
 
-        // 清理 import
+    private void cleanModelImportClass(TopLevelClass topLevelClass) {
         Set<String> typeSet = new HashSet<>();
         typeSet.add(BaseEntity.class.getName());
         for (Field e : topLevelClass.getFields()) {
