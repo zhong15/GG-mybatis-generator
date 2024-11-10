@@ -147,21 +147,6 @@ public class User extends BaseEntity implements java.io.Serializable {
         // super.setIsDeleted(null);
     }
 
-    public static boolean isColumn(String column) {
-        if (column == null || column.trim().length() == 0) {
-            return false;
-        }
-        column = column.toLowerCase();
-        return column.equals("id")
-                || column.equals("nickname")
-                || column.equals("email")
-                || column.equals("password")
-                || column.equals("is_enable")
-                || column.equals("create_time")
-                || column.equals("update_time")
-                || column.equals("is_deleted");
-    }
-
     public enum ColumnEnum {
         /**
          * 主键，类型：Long
@@ -195,5 +180,20 @@ public class User extends BaseEntity implements java.io.Serializable {
          * 是否删除，0：否，1：是，类型：Byte
          */
         is_deleted;
+
+        public static boolean isColumn(String column) {
+            if (column == null || column.trim().length() == 0) {
+                return false;
+            }
+            column = column.toLowerCase();
+            return column.equals("id")
+                    || column.equals("nickname")
+                    || column.equals("email")
+                    || column.equals("password")
+                    || column.equals("is_enable")
+                    || column.equals("create_time")
+                    || column.equals("update_time")
+                    || column.equals("is_deleted");
+        }
     }
 }

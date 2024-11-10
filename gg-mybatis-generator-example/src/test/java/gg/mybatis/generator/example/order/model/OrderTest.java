@@ -105,28 +105,28 @@ public class OrderTest {
 
     @Test
     public void test_isColumn() {
-        Assert.assertFalse(Order.isColumn(null));
-        Assert.assertFalse(Order.isColumn(""));
-        Assert.assertFalse(Order.isColumn("   "));
-        Assert.assertFalse(Order.isColumn("xx"));
-        Assert.assertFalse(Order.isColumn(" xx "));
+        Assert.assertFalse(Order.ColumnEnum.isColumn(null));
+        Assert.assertFalse(Order.ColumnEnum.isColumn(""));
+        Assert.assertFalse(Order.ColumnEnum.isColumn("   "));
+        Assert.assertFalse(Order.ColumnEnum.isColumn("xx"));
+        Assert.assertFalse(Order.ColumnEnum.isColumn(" xx "));
 
-        Assert.assertTrue(Order.isColumn("id"));
-        Assert.assertTrue(Order.isColumn("order_no"));
-        Assert.assertTrue(Order.isColumn("state"));
-        Assert.assertTrue(Order.isColumn("user_id"));
-        Assert.assertTrue(Order.isColumn("address"));
-        Assert.assertTrue(Order.isColumn("create_time"));
-        Assert.assertTrue(Order.isColumn("update_time"));
-        Assert.assertTrue(Order.isColumn("is_deleted"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("id"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("order_no"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("state"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("user_id"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("address"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("create_time"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("update_time"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("is_deleted"));
 
-        Assert.assertTrue(Order.isColumn("ID"));
-        Assert.assertTrue(Order.isColumn("ORDER_NO"));
-        Assert.assertTrue(Order.isColumn("STATE"));
-        Assert.assertTrue(Order.isColumn("USER_ID"));
-        Assert.assertTrue(Order.isColumn("ADDRESS"));
-        Assert.assertTrue(Order.isColumn("CREATE_TIME"));
-        Assert.assertTrue(Order.isColumn("UPDATE_TIME"));
-        Assert.assertTrue(Order.isColumn("IS_DELETED"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("ID"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("ORDER_NO"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("STATE"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("USER_ID"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("ADDRESS"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("CREATE_TIME"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("UPDATE_TIME"));
+        Assert.assertTrue(Order.ColumnEnum.isColumn("IS_DELETED"));
     }
 }

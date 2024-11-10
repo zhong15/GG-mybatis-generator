@@ -106,11 +106,6 @@ public class DefaultRunner implements Runner {
          */
         addClearMethodToModel(topLevelClass, introspectedTable, baseEntityFieldList);
 
-        /*
-         * 添加 isColumn 方法
-         */
-        addIsColumnMethodToModel(topLevelClass, introspectedTable);
-
         // toString() 方法
         addToStringMethodToModel(topLevelClass, baseEntityFieldList);
 
@@ -191,6 +186,23 @@ public class DefaultRunner implements Runner {
             sb.append("        ").append(e.getActualColumnName().toLowerCase());
             innerEnum.addEnumConstant(sb.toString());
         }
+
+        Method isColumn = new Method("isColumn");
+        isColumn.setVisibility(JavaVisibility.PUBLIC);
+        isColumn.setStatic(true);
+        isColumn.setReturnType(GenUtils.javaType("boolean"));
+        isColumn.addParameter(GenUtils.parameter("String", "column", null));
+        isColumn.addBodyLine("if (column == null || column.trim().length() == 0) {");
+        isColumn.addBodyLine("return false;");
+        isColumn.addBodyLine("}");
+        isColumn.addBodyLine("column = column.toLowerCase();");
+        for (int i = 0; i < introspectedTable.getAllColumns().size(); i++) {
+            IntrospectedColumn e = introspectedTable.getAllColumns().get(i);
+            isColumn.addBodyLine((i == 0 ? "return " : "        || ")
+                    + "column.equals(\"" + e.getActualColumnName().toLowerCase() + "\")"
+                    + (i == introspectedTable.getAllColumns().size() - 1 ? ";" : ""));
+        }
+        innerEnum.addMethod(isColumn);
     }
 
     private void addClearMethodToModel(TopLevelClass topLevelClass, IntrospectedTable introspectedTable, List<String> baseEntityFieldList) {
@@ -207,25 +219,6 @@ public class DefaultRunner implements Runner {
             }
         }
         topLevelClass.addMethod(clear);
-    }
-
-    private void addIsColumnMethodToModel(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        Method isColumn = new Method("isColumn");
-        isColumn.setVisibility(JavaVisibility.PUBLIC);
-        isColumn.setStatic(true);
-        isColumn.setReturnType(GenUtils.javaType("boolean"));
-        isColumn.addParameter(GenUtils.parameter("String", "column", null));
-        isColumn.addBodyLine("if (column == null || column.trim().length() == 0) {");
-        isColumn.addBodyLine("return false;");
-        isColumn.addBodyLine("}");
-        isColumn.addBodyLine("column = column.toLowerCase();");
-        for (int i = 0; i < introspectedTable.getAllColumns().size(); i++) {
-            IntrospectedColumn e = introspectedTable.getAllColumns().get(i);
-            isColumn.addBodyLine((i == 0 ? "return " : "        || ")
-                    + "column.equals(\"" + e.getActualColumnName().toLowerCase() + "\")"
-                    + (i == introspectedTable.getAllColumns().size() - 1 ? ";" : ""));
-        }
-        topLevelClass.addMethod(isColumn);
     }
 
     private void addToStringMethodToModel(TopLevelClass topLevelClass, List<String> baseEntityFieldList) {

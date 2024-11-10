@@ -101,26 +101,26 @@ public class UserTest {
 
     @Test
     public void test_isColumn() {
-        Assert.assertFalse(User.isColumn(null));
-        Assert.assertFalse(User.isColumn(""));
-        Assert.assertFalse(User.isColumn("   "));
-        Assert.assertFalse(User.isColumn("xx"));
-        Assert.assertFalse(User.isColumn(" xx "));
+        Assert.assertFalse(User.ColumnEnum.isColumn(null));
+        Assert.assertFalse(User.ColumnEnum.isColumn(""));
+        Assert.assertFalse(User.ColumnEnum.isColumn("   "));
+        Assert.assertFalse(User.ColumnEnum.isColumn("xx"));
+        Assert.assertFalse(User.ColumnEnum.isColumn(" xx "));
 
-        Assert.assertTrue(User.isColumn("id"));
-        Assert.assertTrue(User.isColumn("nickname"));
-        Assert.assertTrue(User.isColumn("email"));
-        Assert.assertTrue(User.isColumn("password"));
-        Assert.assertTrue(User.isColumn("is_enable"));
-        Assert.assertTrue(User.isColumn("create_time"));
-        Assert.assertTrue(User.isColumn("update_time"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("id"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("nickname"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("email"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("password"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("is_enable"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("create_time"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("update_time"));
 
-        Assert.assertTrue(User.isColumn("ID"));
-        Assert.assertTrue(User.isColumn("NICKNAME"));
-        Assert.assertTrue(User.isColumn("EMAIL"));
-        Assert.assertTrue(User.isColumn("PASSWORD"));
-        Assert.assertTrue(User.isColumn("IS_ENABLE"));
-        Assert.assertTrue(User.isColumn("CREATE_TIME"));
-        Assert.assertTrue(User.isColumn("UPDATE_TIME"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("ID"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("NICKNAME"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("EMAIL"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("PASSWORD"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("IS_ENABLE"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("CREATE_TIME"));
+        Assert.assertTrue(User.ColumnEnum.isColumn("UPDATE_TIME"));
     }
 }
