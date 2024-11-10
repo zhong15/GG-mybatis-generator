@@ -19,6 +19,9 @@ package gg.mybatis.generator.common.util;
 import gg.mybatis.generator.common.exception.SqlWhereException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Zhong
  * @since 0.0.1
@@ -36,6 +39,17 @@ public class SqlUtils {
 
     public static boolean existsPage(long count, int page, int size) {
         return (page - 1) * size < count;
+    }
+
+    public static List<String> select(Enum<?>... enums) {
+        if (enums == null || enums.length == 0) {
+            throw new SqlWhereException("select enums error");
+        }
+        List<String> list = new ArrayList<>(enums.length);
+        for (Enum<?> e : enums) {
+            list.add(e.toString());
+        }
+        return list;
     }
 
     public static String orderBy(String... ss) {

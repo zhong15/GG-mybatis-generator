@@ -25,46 +25,6 @@ import gg.mybatis.generator.common.domain.BaseEntity;
  */
 public class Order extends BaseEntity implements java.io.Serializable {
     /**
-     * 主键，类型：Long
-     */
-    public static final String ID_long = "id";
-
-    /**
-     * 订单编号，类型：String
-     */
-    public static final String ORDER_NO_str = "order_no";
-
-    /**
-     * 订单状态，类型：Integer
-     */
-    public static final String STATE_int = "state";
-
-    /**
-     * 用户ID，类型：Long
-     */
-    public static final String USER_ID_long = "user_id";
-
-    /**
-     * 地址，类型：String
-     */
-    public static final String ADDRESS_str = "address";
-
-    /**
-     * 创建时间，类型：java.util.Date
-     */
-    public static final String CREATE_TIME_date = "create_time";
-
-    /**
-     * 修改时间，类型：java.util.Date
-     */
-    public static final String UPDATE_TIME_date = "update_time";
-
-    /**
-     * 是否删除，0：否，1：是，类型：Byte
-     */
-    public static final String IS_DELETED_byte = "is_deleted";
-
-    /**
      * 订单编号
      */
     private String orderNo;
@@ -200,5 +160,40 @@ public class Order extends BaseEntity implements java.io.Serializable {
                 || column.equals("create_time")
                 || column.equals("update_time")
                 || column.equals("is_deleted");
+    }
+
+    public enum ColumnEnum {
+        /**
+         * 主键，类型：Long
+         */
+        id,
+        /**
+         * 订单编号，类型：String
+         */
+        order_no,
+        /**
+         * 订单状态，类型：Integer
+         */
+        state,
+        /**
+         * 用户ID，类型：Long
+         */
+        user_id,
+        /**
+         * 地址，类型：String
+         */
+        address,
+        /**
+         * 创建时间，类型：java.util.Date
+         */
+        create_time,
+        /**
+         * 修改时间，类型：java.util.Date
+         */
+        update_time,
+        /**
+         * 是否删除，0：否，1：是，类型：Byte
+         */
+        is_deleted;
     }
 }

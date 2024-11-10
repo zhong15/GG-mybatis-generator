@@ -246,7 +246,7 @@ public class OrderMapperTest {
         // 执行删除 id_1
         int rows = orderMapper.deleteByWhere(new DefaultWhere()
                 .withoutParamAnnotation()
-                .col(Order.ID_long).eq(id_1));
+                .col(Order.ColumnEnum.id.toString()).eq(id_1));
         Assert.assertEquals(rows, 1);
 
         // 查询 id_1 记录 = null
@@ -314,7 +314,7 @@ public class OrderMapperTest {
 
         Order updateOrder1 = new Order();
         updateOrder1.setId(order1.getId());
-        int rows = orderMapper.updateById(updateOrder1, Arrays.asList(Order.ADDRESS_str));
+        int rows = orderMapper.updateById(updateOrder1, SqlUtils.select(Order.ColumnEnum.address));
         Assert.assertEquals(rows, 1);
 
         order1.setAddress(null);
@@ -339,7 +339,7 @@ public class OrderMapperTest {
         Order updateOrder1 = new Order();
         updateOrder1.setId(order1.getId());
         updateOrder1.setOrderNo(order1.getOrderNo());
-        int rows = orderMapper.updateById(updateOrder1, Arrays.asList(Order.ADDRESS_str));
+        int rows = orderMapper.updateById(updateOrder1, SqlUtils.select(Order.ColumnEnum.address));
         Assert.assertEquals(rows, 1);
 
         order1.setAddress(null);
@@ -361,7 +361,7 @@ public class OrderMapperTest {
         Order order2 = test_insertSelective_core(2, 2);
 
         try {
-            int rows = orderMapper.updateByWhere(null, null, new DefaultWhere().col(Order.ID_long).eq(order1.getId()));
+            int rows = orderMapper.updateByWhere(null, null, new DefaultWhere().col(Order.ColumnEnum.id.toString()).eq(order1.getId()));
             Assert.fail("报错列");
         } catch (MyBatisSystemException e) {
         }
@@ -387,7 +387,7 @@ public class OrderMapperTest {
         Order updateOrder1 = new Order();
         updateOrder1.setId(order1.getId());
         updateOrder1.setOrderNo(order1.getOrderNo());
-        int rows = orderMapper.updateByWhere(updateOrder1, null, new DefaultWhere().col(Order.ID_long).eq(order1.getId()));
+        int rows = orderMapper.updateByWhere(updateOrder1, null, new DefaultWhere().col(Order.ColumnEnum.id.toString()).eq(order1.getId()));
         Assert.assertEquals(rows, 1);
 
         assertEqualDBValue(order1, true, false, true);
@@ -406,7 +406,7 @@ public class OrderMapperTest {
         Order order1 = test_insertSelective_core(1, 1);
         Order order2 = test_insertSelective_core(2, 2);
 
-        int rows = orderMapper.updateByWhere(new Order(), Arrays.asList(Order.ADDRESS_str), new DefaultWhere().col(Order.ID_long).eq(order1.getId()));
+        int rows = orderMapper.updateByWhere(new Order(), SqlUtils.select(Order.ColumnEnum.address), new DefaultWhere().col(Order.ColumnEnum.id.toString()).eq(order1.getId()));
         Assert.assertEquals(rows, 1);
 
         order1.setAddress(null);
@@ -431,7 +431,7 @@ public class OrderMapperTest {
         Order updateOrder1 = new Order();
         updateOrder1.setId(order1.getId());
         updateOrder1.setOrderNo(order1.getOrderNo());
-        int rows = orderMapper.updateByWhere(updateOrder1, Arrays.asList(Order.ADDRESS_str), new DefaultWhere().col(Order.ID_long).eq(order1.getId()));
+        int rows = orderMapper.updateByWhere(updateOrder1, SqlUtils.select(Order.ColumnEnum.address), new DefaultWhere().col(Order.ColumnEnum.id.toString()).eq(order1.getId()));
         Assert.assertEquals(rows, 1);
 
         order1.setAddress(null);
@@ -474,7 +474,7 @@ public class OrderMapperTest {
         Order order1 = test_insertSelective_core(1, 1);
         Order order2 = test_insertSelective_core(2, 2);
 
-        int rows = orderMapper.updateColumnValueById(order1.getId(), Order.ADDRESS_str, null);
+        int rows = orderMapper.updateColumnValueById(order1.getId(), Order.ColumnEnum.address.toString(), null);
         Assert.assertEquals(rows, 1);
 
         order1.setAddress(null);
@@ -518,7 +518,7 @@ public class OrderMapperTest {
         Order order2 = test_insertSelective_core(2, 2);
 
         order1.setAddress(order1.getAddress() + "_update");
-        int rows = orderMapper.updateColumnValueById(order1.getId(), Order.ADDRESS_str, order1.getAddress());
+        int rows = orderMapper.updateColumnValueById(order1.getId(), Order.ColumnEnum.address.toString(), order1.getAddress());
         Assert.assertEquals(rows, 1);
 
         assertEqualDBValue(order1, true, false, true);
@@ -549,7 +549,7 @@ public class OrderMapperTest {
         Order order1 = test_insertSelective_core(1, 1);
         Order order2 = test_insertSelective_core(2, 2);
 
-        Order order1_1 = orderMapper.selectById(order1.getId(), Arrays.asList(Order.ID_long, Order.ORDER_NO_str));
+        Order order1_1 = orderMapper.selectById(order1.getId(), SqlUtils.select(Order.ColumnEnum.id, Order.ColumnEnum.order_no));
 
         Order order1_2 = new Order();
         order1_2.setId(order1.getId());
@@ -587,7 +587,7 @@ public class OrderMapperTest {
         Order order2 = test_insertSelective_core(2, 2);
         Order order3 = test_insertSelective_core(3, 3);
 
-        List<Order> orderList = orderMapper.selectByIdList(Arrays.asList(order1.getId(), order3.getId()), Arrays.asList(Order.ID_long, Order.ORDER_NO_str));
+        List<Order> orderList = orderMapper.selectByIdList(Arrays.asList(order1.getId(), order3.getId()), SqlUtils.select(Order.ColumnEnum.id, Order.ColumnEnum.order_no));
 
         Assert.assertNotNull(orderList);
         Assert.assertEquals(orderList.size(), 2);
@@ -684,7 +684,7 @@ public class OrderMapperTest {
         Order repeatOorder = test_insertSelective_core(1, total);
         Assert.assertEquals(map.get(repeatOorder.getOrderNo()).getAddress(), repeatOorder.getAddress());
 
-        List<String> columnList = Arrays.asList(Order.ORDER_NO_str, Order.ADDRESS_str);
+        List<String> columnList = SqlUtils.select(Order.ColumnEnum.order_no, Order.ColumnEnum.address);
         List<Function<Order, ?>> funcList = Arrays.asList(Order::getOrderNo, Order::getAddress);
         List<Order> list = orderMapper.selectByWhere(null, columnList, null, null, null, null);
         Assert.assertNotNull(list);
@@ -698,42 +698,42 @@ public class OrderMapperTest {
 
     private static void assertSelectColumn(Order order, List<String> columnList) {
         Assert.assertNotNull(order);
-        if (columnList.contains(Order.ID_long)) {
+        if (columnList.contains(Order.ColumnEnum.id.toString())) {
             Assert.assertNotNull(order.getId());
         } else {
             Assert.assertNull(order.getId());
         }
-        if (columnList.contains(Order.ORDER_NO_str)) {
+        if (columnList.contains(Order.ColumnEnum.order_no.toString())) {
             Assert.assertNotNull(order.getOrderNo());
         } else {
             Assert.assertNull(order.getOrderNo());
         }
-        if (columnList.contains(Order.STATE_int)) {
+        if (columnList.contains(Order.ColumnEnum.state.toString())) {
             Assert.assertNotNull(order.getState());
         } else {
             Assert.assertNull(order.getState());
         }
-        if (columnList.contains(Order.USER_ID_long)) {
+        if (columnList.contains(Order.ColumnEnum.user_id.toString())) {
             Assert.assertNotNull(order.getUserId());
         } else {
             Assert.assertNull(order.getUserId());
         }
-        if (columnList.contains(Order.ADDRESS_str)) {
+        if (columnList.contains(Order.ColumnEnum.address.toString())) {
             Assert.assertNotNull(order.getAddress());
         } else {
             Assert.assertNull(order.getAddress());
         }
-        if (columnList.contains(Order.CREATE_TIME_date)) {
+        if (columnList.contains(Order.ColumnEnum.create_time.toString())) {
             Assert.assertNotNull(order.getCreateTime());
         } else {
             Assert.assertNull(order.getCreateTime());
         }
-        if (columnList.contains(Order.UPDATE_TIME_date)) {
+        if (columnList.contains(Order.ColumnEnum.update_time.toString())) {
             Assert.assertNotNull(order.getUpdateTime());
         } else {
             Assert.assertNull(order.getUpdateTime());
         }
-        if (columnList.contains(Order.IS_DELETED_byte)) {
+        if (columnList.contains(Order.ColumnEnum.is_deleted.toString())) {
             Assert.assertNotNull(order.getIsDeleted());
         } else {
             Assert.assertNull(order.getIsDeleted());
@@ -766,7 +766,7 @@ public class OrderMapperTest {
         Order repeatOorder = test_insertSelective_core(1, total);
         Assert.assertEquals(map.get(repeatOorder.getOrderNo()).getAddress(), repeatOorder.getAddress());
 
-        List<String> columnList = Arrays.asList(Order.ORDER_NO_str, Order.ADDRESS_str);
+        List<String> columnList = SqlUtils.select(Order.ColumnEnum.order_no, Order.ColumnEnum.address);
         List<Function<Order, ?>> funcList = Arrays.asList(Order::getOrderNo, Order::getAddress);
         List<Order> list = orderMapper.selectByWhere(false, columnList, null, null, null, null);
         Assert.assertNotNull(list);
@@ -796,7 +796,7 @@ public class OrderMapperTest {
         Order repeatOorder = test_insertSelective_core(1, total);
         Assert.assertEquals(map.get(repeatOorder.getOrderNo()).getAddress(), repeatOorder.getAddress());
 
-        List<String> columnList = Arrays.asList(Order.ORDER_NO_str, Order.ADDRESS_str);
+        List<String> columnList = SqlUtils.select(Order.ColumnEnum.order_no, Order.ColumnEnum.address);
         List<Function<Order, ?>> funcList = Arrays.asList(Order::getOrderNo, Order::getAddress);
         List<Order> list = orderMapper.selectByWhere(true, columnList, null, null, null, null);
         Assert.assertNotNull(list);
@@ -855,7 +855,7 @@ public class OrderMapperTest {
             map.put(order.getId(), order);
         }
 
-        List<Order> list = orderMapper.selectByWhere(null, null, null, SqlUtils.orderBy(Order.ID_long, SqlUtils.DESC), null, null);
+        List<Order> list = orderMapper.selectByWhere(null, null, null, SqlUtils.orderBy(Order.ColumnEnum.id.toString(), SqlUtils.DESC), null, null);
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), total);
         assertCountDistinctId(list, total);
@@ -1026,7 +1026,7 @@ public class OrderMapperTest {
 
         final long offset = 0;
         final int rowCount = total;
-        List<String> columnList = Arrays.asList(Order.ID_long, Order.ORDER_NO_str);
+        List<String> columnList = SqlUtils.select(Order.ColumnEnum.id, Order.ColumnEnum.order_no);
         List<Function<Order, ?>> funcList = Arrays.asList(Order::getId, Order::getOrderNo);
         List<Order> list = orderMapper.selectByWherePageIdIn(columnList, null, null, offset, rowCount);
         Assert.assertNotNull(list);
@@ -1090,7 +1090,7 @@ public class OrderMapperTest {
 
         final long offset = 0;
         final int rowCount = total;
-        List<Order> list = orderMapper.selectByWherePageIdIn(null, null, SqlUtils.orderBy(Order.ID_long, SqlUtils.DESC), offset, rowCount);
+        List<Order> list = orderMapper.selectByWherePageIdIn(null, null, SqlUtils.orderBy(Order.ColumnEnum.id.toString(), SqlUtils.DESC), offset, rowCount);
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), total);
         assertCountDistinctId(list, total);
@@ -1181,7 +1181,7 @@ public class OrderMapperTest {
         }
         Order order = test_insertSelective_core(1, total);
 
-        long count = orderMapper.countByWhere(null, Arrays.asList(Order.ORDER_NO_str), null);
+        long count = orderMapper.countByWhere(null, SqlUtils.select(Order.ColumnEnum.order_no), null);
         Assert.assertEquals(count, (long) total);
     }
 
@@ -1198,7 +1198,7 @@ public class OrderMapperTest {
         }
         Order order = test_insertSelective_core(1, total);
 
-        long count = orderMapper.countByWhere(false, Arrays.asList(Order.ORDER_NO_str), null);
+        long count = orderMapper.countByWhere(false, SqlUtils.select(Order.ColumnEnum.order_no), null);
         Assert.assertEquals(count, (long) total);
     }
 
@@ -1215,7 +1215,7 @@ public class OrderMapperTest {
         }
         Order order = test_insertSelective_core(1, total);
 
-        long count = orderMapper.countByWhere(true, Arrays.asList(Order.ORDER_NO_str), null);
+        long count = orderMapper.countByWhere(true, SqlUtils.select(Order.ColumnEnum.order_no), null);
         Assert.assertEquals(count, (long) total - 1);
     }
 
@@ -1251,7 +1251,7 @@ public class OrderMapperTest {
         }
         int rows = orderMapper.deleteByWhere(new DefaultWhere()
                 .withoutParamAnnotation()
-                .col(Order.ID_long).eq(id));
+                .col(Order.ColumnEnum.id.toString()).eq(id));
         Assert.assertEquals(rows, 1);
 
         long count = orderMapper.countByWhere(null, null, null);
@@ -1274,8 +1274,8 @@ public class OrderMapperTest {
         }
         int rows = orderMapper.deleteByWhere(new DefaultWhere()
                 .withoutParamAnnotation()
-                .col(Order.ID_long).eq(id)
-                .or(Order.ID_long).eq(id + 1));
+                .col(Order.ColumnEnum.id.toString()).eq(id)
+                .or(Order.ColumnEnum.id.toString()).eq(id + 1));
         Assert.assertEquals(rows, 2);
 
         long count = orderMapper.countByWhere(null, null, null);
@@ -1299,8 +1299,8 @@ public class OrderMapperTest {
         int rows = orderMapper.deleteByWhere(new DefaultWhere()
                 .withoutParamAnnotation()
                 .open()
-                .col(Order.ID_long).eq(id)
-                .or(Order.ID_long).eq(id + 1)
+                .col(Order.ColumnEnum.id.toString()).eq(id)
+                .or(Order.ColumnEnum.id.toString()).eq(id + 1)
                 .close());
         Assert.assertEquals(rows, 2);
 
@@ -1334,7 +1334,7 @@ public class OrderMapperTest {
             id = order.getId();
         }
         long count = orderMapper.countByWhere(null, null, new DefaultWhere()
-                .col(Order.ID_long).eq(id));
+                .col(Order.ColumnEnum.id.toString()).eq(id));
         Assert.assertEquals(count, 1L);
     }
 
@@ -1352,8 +1352,8 @@ public class OrderMapperTest {
             }
         }
         long count = orderMapper.countByWhere(null, null, new DefaultWhere()
-                .col(Order.ID_long).eq(id)
-                .or(Order.ID_long).eq(id + 1));
+                .col(Order.ColumnEnum.id.toString()).eq(id)
+                .or(Order.ColumnEnum.id.toString()).eq(id + 1));
         Assert.assertEquals(count, 2L);
     }
 
@@ -1372,8 +1372,8 @@ public class OrderMapperTest {
         }
         long count = orderMapper.countByWhere(null, null, new DefaultWhere()
                 .open()
-                .col(Order.ID_long).eq(id)
-                .or(Order.ID_long).eq(id + 1)
+                .col(Order.ColumnEnum.id.toString()).eq(id)
+                .or(Order.ColumnEnum.id.toString()).eq(id + 1)
                 .close());
         Assert.assertEquals(count, 2L);
     }

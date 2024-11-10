@@ -25,46 +25,6 @@ import gg.mybatis.generator.common.domain.BaseEntity;
  */
 public class User extends BaseEntity implements java.io.Serializable {
     /**
-     * 主键，类型：Long
-     */
-    public static final String ID_long = "id";
-
-    /**
-     * 昵称，类型：String
-     */
-    public static final String NICKNAME_str = "nickname";
-
-    /**
-     * 电子邮箱，类型：String
-     */
-    public static final String EMAIL_str = "email";
-
-    /**
-     * 密码，类型：String
-     */
-    public static final String PASSWORD_str = "password";
-
-    /**
-     * 是否可用，0：否，1：是，类型：Byte
-     */
-    public static final String IS_ENABLE_byte = "is_enable";
-
-    /**
-     * 创建时间，类型：java.util.Date
-     */
-    public static final String CREATE_TIME_date = "create_time";
-
-    /**
-     * 修改时间，类型：java.util.Date
-     */
-    public static final String UPDATE_TIME_date = "update_time";
-
-    /**
-     * 是否删除，0：否，1：是，类型：Byte
-     */
-    public static final String IS_DELETED_byte = "is_deleted";
-
-    /**
      * 昵称
      */
     private String nickname;
@@ -200,5 +160,40 @@ public class User extends BaseEntity implements java.io.Serializable {
                 || column.equals("create_time")
                 || column.equals("update_time")
                 || column.equals("is_deleted");
+    }
+
+    public enum ColumnEnum {
+        /**
+         * 主键，类型：Long
+         */
+        id,
+        /**
+         * 昵称，类型：String
+         */
+        nickname,
+        /**
+         * 电子邮箱，类型：String
+         */
+        email,
+        /**
+         * 密码，类型：String
+         */
+        password,
+        /**
+         * 是否可用，0：否，1：是，类型：Byte
+         */
+        is_enable,
+        /**
+         * 创建时间，类型：java.util.Date
+         */
+        create_time,
+        /**
+         * 修改时间，类型：java.util.Date
+         */
+        update_time,
+        /**
+         * 是否删除，0：否，1：是，类型：Byte
+         */
+        is_deleted;
     }
 }

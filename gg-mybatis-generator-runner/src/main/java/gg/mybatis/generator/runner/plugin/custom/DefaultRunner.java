@@ -99,7 +99,7 @@ public class DefaultRunner implements Runner {
         /*
          * 添加列名
          */
-        addColumnNameStaticPropertyToModel(topLevelClass, introspectedTable);
+        addColumnEnumToModel(topLevelClass, introspectedTable);
 
         /**
          * 添加 clear 方法
@@ -167,28 +167,29 @@ public class DefaultRunner implements Runner {
         }
     }
 
-    private void addColumnNameStaticPropertyToModel(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        for (int i = introspectedTable.getAllColumns().size() - 1; i >= 0; i--) {
+    private void addColumnEnumToModel(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        final String columnEnum = "ColumnEnum";
+        InnerEnum innerEnum = new InnerEnum(columnEnum);
+        innerEnum.setVisibility(JavaVisibility.PUBLIC);
+        topLevelClass.addInnerEnum(innerEnum);
+
+        for (int i = 0; i < introspectedTable.getAllColumns().size(); i++) {
             IntrospectedColumn e = introspectedTable.getAllColumns().get(i);
 
-            FullyQualifiedJavaType type = new FullyQualifiedJavaType("String");
-            Field column = new Field(e.getActualColumnName().toUpperCase() + "_" + getJavaTypeShortName(e.getFullyQualifiedJavaType().getShortName()), type);
-            column.addJavaDocLine("/**");
+            StringBuilder sb = new StringBuilder();
+            sb.append("/**\n");
             String javaType = e.getFullyQualifiedJavaType().toString();
             if (javaType.startsWith("java.lang")) {
                 javaType = e.getFullyQualifiedJavaType().getShortName();
             }
             if (e.getRemarks() == null || e.getRemarks().trim().length() == 0) {
-                column.addJavaDocLine(" * " + "类型：" + javaType);
+                sb.append("         * 类型：").append(javaType).append("\n");
             } else {
-                column.addJavaDocLine(" * " + e.getRemarks().trim() + "，类型：" + javaType);
+                sb.append("         * ").append(e.getRemarks().trim()).append("，类型：").append(javaType).append("\n");
             }
-            column.addJavaDocLine(" */");
-            column.setVisibility(JavaVisibility.PUBLIC);
-            column.setStatic(true);
-            column.setFinal(true);
-            column.setInitializationString("\"" + e.getActualColumnName() + "\"");
-            topLevelClass.getFields().add(0, column);
+            sb.append("         */\n");
+            sb.append("        ").append(e.getActualColumnName().toLowerCase());
+            innerEnum.addEnumConstant(sb.toString());
         }
     }
 
@@ -302,12 +303,6 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-//    @Override
-//    public void clientDeleteById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        method.setReturnType(new FullyQualifiedJavaType("int"));
-//        method.addParameter(GenUtils.parameter(GenUtils.primaryKeyShortJavaType(introspectedTable), "id", null));
-//    }
-
     @Override
     public void sqlMapDeleteById(XmlElement element, IntrospectedTable introspectedTable) {
         element.addAttribute(new Attribute("parameterType", GenUtils.primaryKeyFullJavaType(introspectedTable)));
@@ -328,13 +323,6 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-//    @Override
-//    public void clientDeleteByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-//        method.setReturnType(new FullyQualifiedJavaType("int"));
-//        method.addParameter(GenUtils.parameter(WHERE_CLASS_SIMPLE_NAME, "where", null));
-//    }
-
     @Override
     public void sqlMapDeleteByWhere(XmlElement element, IntrospectedTable introspectedTable) {
         element.addAttribute(new Attribute("parameterType", WHERE_CLASS_NAME));
@@ -343,13 +331,6 @@ public class DefaultRunner implements Runner {
         map.put("tableName", introspectedTable.getTableConfiguration().getTableName());
         tpl(element, map);
     }
-
-//    @Override
-//    public void clientUpdateById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        method.setReturnType(new FullyQualifiedJavaType("int"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(introspectedTable.getBaseRecordType(), "row"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "setNullColumnList"));
-//    }
 
     @Override
     public void sqlMapUpdateById(XmlElement element, IntrospectedTable introspectedTable) {
@@ -362,14 +343,6 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-//    @Override
-//    public void clientUpdateColumnValueById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        method.setReturnType(new FullyQualifiedJavaType("int"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.primaryKeyShortJavaType(introspectedTable), "id"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "column"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Object"), "value"));
-//    }
-
     @Override
     public void sqlMapUpdateColumnValueById(XmlElement element, IntrospectedTable introspectedTable) {
         Map<String, Object> map = new HashMap<>();
@@ -377,15 +350,6 @@ public class DefaultRunner implements Runner {
         map.put("pk", GenUtils.primaryKey(introspectedTable));
         tpl(element, map);
     }
-
-//    @Override
-//    public void clientUpdateByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-//        method.setReturnType(new FullyQualifiedJavaType("int"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(introspectedTable.getBaseRecordType(), "row"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "setNullColumnList"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
-//    }
 
     @Override
     public void sqlMapUpdateByWhere(XmlElement element, IntrospectedTable introspectedTable) {
@@ -396,14 +360,6 @@ public class DefaultRunner implements Runner {
                 .collect(Collectors.toList()));
         tpl(element, map);
     }
-
-//    @Override
-//    public void clientSelectById(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-//        method.setReturnType(GenUtils.javaType(introspectedTable.getBaseRecordType()));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.primaryKeyShortJavaType(introspectedTable), "id"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
-//    }
 
     @Override
     public void sqlMapSelectById(XmlElement element, IntrospectedTable introspectedTable) {
@@ -425,17 +381,6 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-//    @Override
-//    public void clientSelectByWherePageIdIn(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-//        method.setReturnType(GenUtils.javaType("List", introspectedTable.getBaseRecordType()));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "orderBy"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType(/*Long*/"long"), "offset"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType(/*"Integer"*/"int"), "rowCount"));
-//    }
-
     @Override
     public void sqlMapSelectByWherePageIdIn(XmlElement element, IntrospectedTable introspectedTable) {
         element.addAttribute(new Attribute("resultMap", introspectedTable.getBaseResultMapId()));
@@ -446,18 +391,6 @@ public class DefaultRunner implements Runner {
         tpl(element, map);
     }
 
-//    @Override
-//    public void clientSelectByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-//        method.setReturnType(GenUtils.javaType("List", introspectedTable.getBaseRecordType()));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Boolean"), "distinct"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("String"), "orderBy"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Long"), "offset"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("Integer"), "rowCount"));
-//    }
-
     @Override
     public void sqlMapSelectByWhere(XmlElement element, IntrospectedTable introspectedTable) {
         element.addAttribute(new Attribute("resultMap", introspectedTable.getBaseResultMapId()));
@@ -466,15 +399,6 @@ public class DefaultRunner implements Runner {
         map.put("tableName", introspectedTable.getTableConfiguration().getTableName());
         tpl(element, map);
     }
-
-//    @Override
-//    public void clientCountByWhere(Interface interfaze, Method method, IntrospectedTable introspectedTable) {
-//        interfaze.addImportedType(new FullyQualifiedJavaType(WHERE_CLASS_NAME));
-//        method.setReturnType(new FullyQualifiedJavaType("long"));
-//        method.addParameter(GenUtils.parameterAndAnnotation("Boolean", "distinct"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(GenUtils.javaType("List", "String"), "columnList"));
-//        method.addParameter(GenUtils.parameterAndAnnotation(WHERE_CLASS_SIMPLE_NAME, "where"));
-//    }
 
     @Override
     public void sqlMapCountByWhere(XmlElement element, IntrospectedTable introspectedTable) {

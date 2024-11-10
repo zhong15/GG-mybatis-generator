@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static gg.mybatis.generator.common.util.SqlUtils.DESC;
@@ -46,7 +45,7 @@ public class UserServiceImpl implements UserService {
     public void test() {
         final String searchKey = "foo";
 
-        List<String> columnList = Arrays.asList(User.ID_long, User.NICKNAME_str);
+        List<String> columnList = SqlUtils.select(User.ColumnEnum.id, User.ColumnEnum.nickname);
 
         final int pageNum = 1;
         final int pageSize = 10;
@@ -59,9 +58,9 @@ public class UserServiceImpl implements UserService {
         // %foo%(String), %foo%(String), 0(Long), 10(Integer)
         List<User> list = userMapper.selectByWherePageIdIn(columnList,
                 new DefaultWhere()
-                        .col(User.NICKNAME_str).like("%" + searchKey + "%")
-                        .or(User.NICKNAME_str).like("%" + searchKey + "%"),
-                SqlUtils.orderBy(User.NICKNAME_str, DESC, User.ID_long, DESC),
+                        .col(User.ColumnEnum.nickname.toString()).like("%" + searchKey + "%")
+                        .or(User.ColumnEnum.nickname.toString()).like("%" + searchKey + "%"),
+                SqlUtils.orderBy(User.ColumnEnum.nickname.toString(), DESC, User.ColumnEnum.id.toString(), DESC),
                 SqlUtils.offset(pageNum, pageSize),
                 pageSize);
 
@@ -75,13 +74,13 @@ public class UserServiceImpl implements UserService {
         // 1(Long), %foo%(String), %foo%(String), 0(Long), 10(Integer)
         list = userMapper.selectByWherePageIdIn(columnList,
                 new DefaultWhere()
-                        .col(User.ID_long).gte(1L)
+                        .col(User.ColumnEnum.id.toString()).gte(1L)
                         .and()
                         .open()
-                        .col(User.NICKNAME_str).like("%" + searchKey + "%")
-                        .or(User.NICKNAME_str).like("%" + searchKey + "%")
+                        .col(User.ColumnEnum.nickname.toString()).like("%" + searchKey + "%")
+                        .or(User.ColumnEnum.nickname.toString()).like("%" + searchKey + "%")
                         .close(),
-                SqlUtils.orderBy(User.NICKNAME_str, DESC, User.ID_long, DESC),
+                SqlUtils.orderBy(User.ColumnEnum.nickname.toString(), DESC, User.ColumnEnum.id.toString(), DESC),
                 SqlUtils.offset(pageNum, pageSize),
                 pageSize);
 

@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static gg.mybatis.generator.common.util.SqlUtils.DESC;
@@ -46,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     public void test() {
         final String searchKey = "20";
 
-        List<String> columnList = Arrays.asList(Order.ID_long, Order.ORDER_NO_str);
+        List<String> columnList = SqlUtils.select(Order.ColumnEnum.id, Order.ColumnEnum.order_no);
 
         final int pageNum = 1;
         final int pageSize = 10;
@@ -59,9 +58,9 @@ public class OrderServiceImpl implements OrderService {
         // %20%(String), %20%(String), 0(Long), 10(Integer)
         List<Order> list = orderMapper.selectByWherePageIdIn(columnList,
                 new DefaultWhere()
-                        .col(Order.ORDER_NO_str).like("%" + searchKey + "%")
-                        .or(Order.ADDRESS_str).like("%" + searchKey + "%"),
-                SqlUtils.orderBy(Order.CREATE_TIME_date, DESC, Order.ID_long, DESC),
+                        .col(Order.ColumnEnum.order_no.toString()).like("%" + searchKey + "%")
+                        .or(Order.ColumnEnum.address.toString()).like("%" + searchKey + "%"),
+                SqlUtils.orderBy(Order.ColumnEnum.create_time.toString(), DESC, Order.ColumnEnum.id.toString(), DESC),
                 SqlUtils.offset(pageNum, pageSize),
                 pageSize);
 
@@ -75,13 +74,13 @@ public class OrderServiceImpl implements OrderService {
         // 1(Long), %20%(String), %20%(String), 0(Long), 10(Integer)
         list = orderMapper.selectByWherePageIdIn(columnList,
                 new DefaultWhere()
-                        .col(Order.ID_long).gte(1L)
+                        .col(Order.ColumnEnum.id.toString()).gte(1L)
                         .and()
                         .open()
-                        .col(Order.ORDER_NO_str).like("%" + searchKey + "%")
-                        .or(Order.ADDRESS_str).like("%" + searchKey + "%")
+                        .col(Order.ColumnEnum.order_no.toString()).like("%" + searchKey + "%")
+                        .or(Order.ColumnEnum.address.toString()).like("%" + searchKey + "%")
                         .close(),
-                SqlUtils.orderBy(Order.CREATE_TIME_date, DESC, Order.ID_long, DESC),
+                SqlUtils.orderBy(Order.ColumnEnum.create_time.toString(), DESC, Order.ColumnEnum.id.toString(), DESC),
                 SqlUtils.offset(pageNum, pageSize),
                 pageSize);
 

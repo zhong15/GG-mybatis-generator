@@ -239,7 +239,7 @@ public class UserMapperTest {
         // 执行删除 id_1
         int rows = userMapper.deleteByWhere(new DefaultWhere()
                 .withoutParamAnnotation()
-                .col(User.ID_long).eq(id_1));
+                .col(User.ColumnEnum.id.toString()).eq(id_1));
         Assert.assertEquals(rows, 1);
 
         // 查询 id_1 记录 = null
@@ -307,7 +307,7 @@ public class UserMapperTest {
 
         User updateUser1 = new User();
         updateUser1.setId(user1.getId());
-        int rows = userMapper.updateById(updateUser1, Arrays.asList(User.NICKNAME_str));
+        int rows = userMapper.updateById(updateUser1, SqlUtils.select(User.ColumnEnum.nickname));
         Assert.assertEquals(rows, 1);
 
         user1.setNickname(null);
@@ -332,7 +332,7 @@ public class UserMapperTest {
         User updateUser1 = new User();
         updateUser1.setId(user1.getId());
         updateUser1.setEmail(user1.getEmail());
-        int rows = userMapper.updateById(updateUser1, Arrays.asList(User.NICKNAME_str));
+        int rows = userMapper.updateById(updateUser1, SqlUtils.select(User.ColumnEnum.nickname));
         Assert.assertEquals(rows, 1);
 
         user1.setNickname(null);
@@ -354,7 +354,7 @@ public class UserMapperTest {
         User user2 = test_insertSelective_core(2, 2);
 
         try {
-            int rows = userMapper.updateByWhere(null, null, new DefaultWhere().col(User.ID_long).eq(user1.getId()));
+            int rows = userMapper.updateByWhere(null, null, new DefaultWhere().col(User.ColumnEnum.id.toString()).eq(user1.getId()));
             Assert.fail("报错列");
         } catch (MyBatisSystemException e) {
         }
@@ -380,7 +380,7 @@ public class UserMapperTest {
         User updateUser1 = new User();
         updateUser1.setId(user1.getId());
         updateUser1.setEmail(user1.getEmail());
-        int rows = userMapper.updateByWhere(updateUser1, null, new DefaultWhere().col(User.ID_long).eq(user1.getId()));
+        int rows = userMapper.updateByWhere(updateUser1, null, new DefaultWhere().col(User.ColumnEnum.id.toString()).eq(user1.getId()));
         Assert.assertEquals(rows, 1);
 
         assertEqualDBValue(user1, true, false, true);
@@ -399,7 +399,7 @@ public class UserMapperTest {
         User user1 = test_insertSelective_core(1, 1);
         User user2 = test_insertSelective_core(2, 2);
 
-        int rows = userMapper.updateByWhere(new User(), Arrays.asList(User.NICKNAME_str), new DefaultWhere().col(User.ID_long).eq(user1.getId()));
+        int rows = userMapper.updateByWhere(new User(), SqlUtils.select(User.ColumnEnum.nickname), new DefaultWhere().col(User.ColumnEnum.id.toString()).eq(user1.getId()));
         Assert.assertEquals(rows, 1);
 
         user1.setNickname(null);
@@ -424,7 +424,7 @@ public class UserMapperTest {
         User updateUser1 = new User();
         updateUser1.setId(user1.getId());
         updateUser1.setEmail(user1.getEmail());
-        int rows = userMapper.updateByWhere(updateUser1, Arrays.asList(User.NICKNAME_str), new DefaultWhere().col(User.ID_long).eq(user1.getId()));
+        int rows = userMapper.updateByWhere(updateUser1, SqlUtils.select(User.ColumnEnum.nickname), new DefaultWhere().col(User.ColumnEnum.id.toString()).eq(user1.getId()));
         Assert.assertEquals(rows, 1);
 
         user1.setNickname(null);
@@ -467,7 +467,7 @@ public class UserMapperTest {
         User user1 = test_insertSelective_core(1, 1);
         User user2 = test_insertSelective_core(2, 2);
 
-        int rows = userMapper.updateColumnValueById(user1.getId(), User.NICKNAME_str, null);
+        int rows = userMapper.updateColumnValueById(user1.getId(), User.ColumnEnum.nickname.toString(), null);
         Assert.assertEquals(rows, 1);
 
         user1.setNickname(null);
@@ -511,7 +511,7 @@ public class UserMapperTest {
         User user2 = test_insertSelective_core(2, 2);
 
         user1.setNickname(user1.getNickname() + "_update");
-        int rows = userMapper.updateColumnValueById(user1.getId(), User.NICKNAME_str, user1.getNickname());
+        int rows = userMapper.updateColumnValueById(user1.getId(), User.ColumnEnum.nickname.toString(), user1.getNickname());
         Assert.assertEquals(rows, 1);
 
         assertEqualDBValue(user1, true, false, true);
@@ -542,7 +542,7 @@ public class UserMapperTest {
         User user1 = test_insertSelective_core(1, 1);
         User user2 = test_insertSelective_core(2, 2);
 
-        User user1_1 = userMapper.selectById(user1.getId(), Arrays.asList(User.ID_long, User.EMAIL_str));
+        User user1_1 = userMapper.selectById(user1.getId(), SqlUtils.select(User.ColumnEnum.id, User.ColumnEnum.email));
 
         User user1_2 = new User();
         user1_2.setId(user1.getId());
@@ -580,7 +580,7 @@ public class UserMapperTest {
         User user2 = test_insertSelective_core(2, 2);
         User user3 = test_insertSelective_core(3, 3);
 
-        List<User> userList = userMapper.selectByIdList(Arrays.asList(user1.getId(), user3.getId()), Arrays.asList(User.ID_long, User.EMAIL_str));
+        List<User> userList = userMapper.selectByIdList(Arrays.asList(user1.getId(), user3.getId()), SqlUtils.select(User.ColumnEnum.id, User.ColumnEnum.email));
 
         Assert.assertNotNull(userList);
         Assert.assertEquals(userList.size(), 2);
@@ -677,7 +677,7 @@ public class UserMapperTest {
         User repeatUser = test_insertSelective_core(1, total);
         Assert.assertEquals(map.get(repeatUser.getEmail()).getNickname(), repeatUser.getNickname());
 
-        List<String> columnList = Arrays.asList(User.EMAIL_str, User.NICKNAME_str);
+        List<String> columnList = SqlUtils.select(User.ColumnEnum.email, User.ColumnEnum.nickname);
         List<Function<User, ?>> funcList = Arrays.asList(User::getEmail, User::getNickname);
         List<User> list = userMapper.selectByWhere(null, columnList, null, null, null, null);
         Assert.assertNotNull(list);
@@ -691,37 +691,37 @@ public class UserMapperTest {
 
     private static void assertSelectColumn(User user, List<String> columnList) {
         Assert.assertNotNull(user);
-        if (columnList.contains(User.ID_long)) {
+        if (columnList.contains(User.ColumnEnum.id.toString())) {
             Assert.assertNotNull(user.getId());
         } else {
             Assert.assertNull(user.getId());
         }
-        if (columnList.contains(User.EMAIL_str)) {
+        if (columnList.contains(User.ColumnEnum.email.toString())) {
             Assert.assertNotNull(user.getEmail());
         } else {
             Assert.assertNull(user.getEmail());
         }
-        if (columnList.contains(User.PASSWORD_str)) {
+        if (columnList.contains(User.ColumnEnum.password.toString())) {
             Assert.assertNotNull(user.getPassword());
         } else {
             Assert.assertNull(user.getPassword());
         }
-        if (columnList.contains(User.IS_ENABLE_byte)) {
+        if (columnList.contains(User.ColumnEnum.is_enable.toString())) {
             Assert.assertNotNull(user.getIsEnable());
         } else {
             Assert.assertNull(user.getIsEnable());
         }
-        if (columnList.contains(User.NICKNAME_str)) {
+        if (columnList.contains(User.ColumnEnum.nickname.toString())) {
             Assert.assertNotNull(user.getNickname());
         } else {
             Assert.assertNull(user.getNickname());
         }
-        if (columnList.contains(User.CREATE_TIME_date)) {
+        if (columnList.contains(User.ColumnEnum.create_time.toString())) {
             Assert.assertNotNull(user.getCreateTime());
         } else {
             Assert.assertNull(user.getCreateTime());
         }
-        if (columnList.contains(User.UPDATE_TIME_date)) {
+        if (columnList.contains(User.ColumnEnum.update_time.toString())) {
             Assert.assertNotNull(user.getUpdateTime());
         } else {
             Assert.assertNull(user.getUpdateTime());
@@ -754,7 +754,7 @@ public class UserMapperTest {
         User repeatUser = test_insertSelective_core(1, total);
         Assert.assertEquals(map.get(repeatUser.getEmail()).getNickname(), repeatUser.getNickname());
 
-        List<String> columnList = Arrays.asList(User.EMAIL_str, User.NICKNAME_str);
+        List<String> columnList = SqlUtils.select(User.ColumnEnum.email, User.ColumnEnum.nickname);
         List<Function<User, ?>> funcList = Arrays.asList(User::getEmail, User::getNickname);
         List<User> list = userMapper.selectByWhere(false, columnList, null, null, null, null);
         Assert.assertNotNull(list);
@@ -784,7 +784,7 @@ public class UserMapperTest {
         User repeatUser = test_insertSelective_core(1, total);
         Assert.assertEquals(map.get(repeatUser.getEmail()).getNickname(), repeatUser.getNickname());
 
-        List<String> columnList = Arrays.asList(User.EMAIL_str, User.NICKNAME_str);
+        List<String> columnList = SqlUtils.select(User.ColumnEnum.email, User.ColumnEnum.nickname);
         List<Function<User, ?>> funcList = Arrays.asList(User::getEmail, User::getNickname);
         List<User> list = userMapper.selectByWhere(true, columnList, null, null, null, null);
         Assert.assertNotNull(list);
@@ -843,7 +843,7 @@ public class UserMapperTest {
             map.put(user.getId(), user);
         }
 
-        List<User> list = userMapper.selectByWhere(null, null, null, SqlUtils.orderBy(User.ID_long, SqlUtils.DESC), null, null);
+        List<User> list = userMapper.selectByWhere(null, null, null, SqlUtils.orderBy(User.ColumnEnum.id.toString(), SqlUtils.DESC), null, null);
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), total);
         assertCountDistinctId(list, total);
@@ -1014,7 +1014,7 @@ public class UserMapperTest {
 
         final long offset = 0;
         final int rowCount = total;
-        List<String> columnList = Arrays.asList(User.ID_long, User.EMAIL_str);
+        List<String> columnList = SqlUtils.select(User.ColumnEnum.id, User.ColumnEnum.email);
         List<Function<User, ?>> funcList = Arrays.asList(User::getId, User::getEmail);
         List<User> list = userMapper.selectByWherePageIdIn(columnList, null, null, offset, rowCount);
         Assert.assertNotNull(list);
@@ -1079,7 +1079,7 @@ public class UserMapperTest {
 
         final long offset = 0;
         final int rowCount = total;
-        List<User> list = userMapper.selectByWherePageIdIn(null, null, SqlUtils.orderBy(User.ID_long, SqlUtils.DESC), offset, rowCount);
+        List<User> list = userMapper.selectByWherePageIdIn(null, null, SqlUtils.orderBy(User.ColumnEnum.id.toString(), SqlUtils.DESC), offset, rowCount);
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), total);
         assertCountDistinctId(list, total);
@@ -1170,7 +1170,7 @@ public class UserMapperTest {
         }
         User user = test_insertSelective_core(1, total);
 
-        long count = userMapper.countByWhere(null, Arrays.asList(User.EMAIL_str), null);
+        long count = userMapper.countByWhere(null, SqlUtils.select(User.ColumnEnum.email), null);
         Assert.assertEquals(count, (long) total);
     }
 
@@ -1187,7 +1187,7 @@ public class UserMapperTest {
         }
         User user = test_insertSelective_core(1, total);
 
-        long count = userMapper.countByWhere(false, Arrays.asList(User.EMAIL_str), null);
+        long count = userMapper.countByWhere(false, SqlUtils.select(User.ColumnEnum.email), null);
         Assert.assertEquals(count, (long) total);
     }
 
@@ -1204,7 +1204,7 @@ public class UserMapperTest {
         }
         User user = test_insertSelective_core(1, total);
 
-        long count = userMapper.countByWhere(true, Arrays.asList(User.EMAIL_str), null);
+        long count = userMapper.countByWhere(true, SqlUtils.select(User.ColumnEnum.email), null);
         Assert.assertEquals(count, (long) total - 1);
     }
 
@@ -1240,7 +1240,7 @@ public class UserMapperTest {
         }
         int rows = userMapper.deleteByWhere(new DefaultWhere()
                 .withoutParamAnnotation()
-                .col(User.ID_long).eq(id));
+                .col(User.ColumnEnum.id.toString()).eq(id));
         Assert.assertEquals(rows, 1);
 
         long count = userMapper.countByWhere(null, null, null);
@@ -1263,8 +1263,8 @@ public class UserMapperTest {
         }
         int rows = userMapper.deleteByWhere(new DefaultWhere()
                 .withoutParamAnnotation()
-                .col(User.ID_long).eq(id)
-                .or(User.ID_long).eq(id + 1));
+                .col(User.ColumnEnum.id.toString()).eq(id)
+                .or(User.ColumnEnum.id.toString()).eq(id + 1));
         Assert.assertEquals(rows, 2);
 
         long count = userMapper.countByWhere(null, null, null);
@@ -1288,8 +1288,8 @@ public class UserMapperTest {
         int rows = userMapper.deleteByWhere(new DefaultWhere()
                 .withoutParamAnnotation()
                 .open()
-                .col(User.ID_long).eq(id)
-                .or(User.ID_long).eq(id + 1)
+                .col(User.ColumnEnum.id.toString()).eq(id)
+                .or(User.ColumnEnum.id.toString()).eq(id + 1)
                 .close());
         Assert.assertEquals(rows, 2);
 
@@ -1323,7 +1323,7 @@ public class UserMapperTest {
             id = user.getId();
         }
         long count = userMapper.countByWhere(null, null, new DefaultWhere()
-                .col(User.ID_long).eq(id));
+                .col(User.ColumnEnum.id.toString()).eq(id));
         Assert.assertEquals(count, 1L);
     }
 
@@ -1341,8 +1341,8 @@ public class UserMapperTest {
             }
         }
         long count = userMapper.countByWhere(null, null, new DefaultWhere()
-                .col(User.ID_long).eq(id)
-                .or(User.ID_long).eq(id + 1));
+                .col(User.ColumnEnum.id.toString()).eq(id)
+                .or(User.ColumnEnum.id.toString()).eq(id + 1));
         Assert.assertEquals(count, 2L);
     }
 
@@ -1361,8 +1361,8 @@ public class UserMapperTest {
         }
         long count = userMapper.countByWhere(null, null, new DefaultWhere()
                 .open()
-                .col(User.ID_long).eq(id)
-                .or(User.ID_long).eq(id + 1)
+                .col(User.ColumnEnum.id.toString()).eq(id)
+                .or(User.ColumnEnum.id.toString()).eq(id + 1)
                 .close());
         Assert.assertEquals(count, 2L);
     }
