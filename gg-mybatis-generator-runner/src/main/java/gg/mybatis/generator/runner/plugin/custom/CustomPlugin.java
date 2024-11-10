@@ -166,45 +166,11 @@ public class CustomPlugin extends PluginAdapter {
                 introspectedTable.getInsertSelectiveStatementId());
         for (Iterator<Method> it = interfaze.getMethods().iterator(); it.hasNext(); ) {
             Method e = it.next();
-//
-//            boolean keep = false;
-//            for (String keepId : keepIdList) {
-//                if (e.getName().equals(keepId)) {
-//                    keep = true;
-//                    break;
-//                }
-//            }
-//            if (keep) {
-//                continue;
-//            }
 
             log.info("删除 {} client: {}", introspectedTable.getTableConfiguration().getTableName(), e.getName());
 
             it.remove();
         }
-
-        /*
-         * 添加自定义的 Mapper 方法
-         */
-//        for (java.lang.reflect.Method m : Runner.getSortedMethod(runner.getClass())) {
-//            String prefix = Runner.CLIENT_METHOD_PREFIX;
-//            if (m.getName().startsWith(prefix)) {
-//                String methodName = GenUtils.firstCharToLower(m.getName().substring(prefix.length()));
-//
-//                log.info("生成 {} client: {}", introspectedTable.getTableConfiguration().getTableName(), methodName);
-//
-//                Method method = new Method(methodName);
-//                method.setAbstract(true);
-//                try {
-//                    m.invoke(runner, interfaze, method, introspectedTable);
-//                    interfaze.addMethod(method);
-//                } catch (IllegalAccessException e) {
-//                    throw new RuntimeException(e);
-//                } catch (InvocationTargetException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
 
         return true;
     }
