@@ -82,15 +82,16 @@ public class MyGenerator {
 //
 // 1(Long), %abc%(String), %abc%(String), 0(Long), 10(Integer)
 List<User> userList = userMapper.selectByWherePageIdIn(
-        Arrays.asList(User.ID_long, User.NICKNAME_str),
+        SqlUtils.select(User.ColumnEnum.id, User.ColumnEnum.nickname),
         new DefaultWhere()
-                .col(User.ID_long).gte(1L)
+                .col(User.ColumnEnum.id.toString()).gte(1L)
                 .and()
                 .open()
-                    .col(User.NICKNAME_str).like("%abc%")
-                    .or(User.NICKNAME_str).like("%abc%")
+                    .col(User.ColumnEnum.nickname.toString()).like("%abc%")
+                    .or(User.ColumnEnum.nickname.toString()).like("%abc%")
                 .close(),
-        SqlUtils.orderBy(User.NICKNAME_str, SqlUtils.ASC, User.ID_long, SqlUtils.DESC),
+        SqlUtils.orderBy(User.ColumnEnum.nickname.toString(), SqlUtils.ASC,
+                User.ColumnEnum.id.toString(), SqlUtils.DESC),
         SqlUtils.offset(pageNum, pageSize),
         pageSize);
 
@@ -103,11 +104,11 @@ int rows = userMapper.deleteByWhere(
         new DefaultWhere()
                 // 必须先调用 .withoutParamAnnotation()
                 .withoutParamAnnotation()
-                .col(User.ID_long).gte(1L)
+                .col(User.ColumnEnum.id.toString()).gte(1L)
                 .and()
                 .open()
-                    .col(User.NICKNAME_str).like("%abc%")
-                    .or(User.NICKNAME_str).like("%abc%")
+                    .col(User.ColumnEnum.nickname.toString()).like("%abc%")
+                    .or(User.ColumnEnum.nickname.toString()).like("%abc%")
                 .close()
 );
 ```
@@ -123,35 +124,11 @@ int rows = userMapper.deleteByWhere(
  * t_user
  */
 public class User extends BaseEntity implements java.io.Serializable {
-    // 数据库表字段常量，命名规则：字段名_Java类型
-
-    /**
-     * 主键，类型：Long
-     */
-    public static final String ID_long = "id";
-
-    ...
-
     // 数据库表字段，命名规则：字段名
-
-    /**
-     * 昵称
-     */
-    private String nickname;
-
-    ...
 
     // 序列化版本号
 
-    private static final long serialVersionUID = 1L;
-
     // get set 方法
-    
-    public String getNickname() { ... }
-
-    public void setNickname(String nickname) { ... }
-
-    ...
 
     // 通用方法
 
@@ -164,18 +141,21 @@ public class User extends BaseEntity implements java.io.Serializable {
     @Override
     public int hashCode() { ... }
 
-    /**
-     * 清空值
-     */
     @Override
     public void clear() { ... }
 
-    /**
-     * 判断是否是表字段
-     * @param column 字段名，不区分大小写
-     * @return true 如果是表字段
-     */
-    public static boolean isColumn(String column) { ... }
+    // 数据库表字段常量枚举类
+
+    public enum ColumnEnum {
+      /**
+       * 主键，类型：Long
+       */
+      id,
+      ...
+      ;
+
+      public static boolean isColumn(String column) { ... }
+    }
 }
 ```
 
