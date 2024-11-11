@@ -182,7 +182,7 @@ public class User extends BaseEntity implements java.io.Serializable {
         is_deleted;
 
         public static boolean isColumn(String column) {
-            if (column == null || column.trim().length() == 0) {
+            if (column == null || column.length() == 0) {
                 return false;
             }
             column = column.toLowerCase();

@@ -192,7 +192,7 @@ public class DefaultRunner implements Runner {
         isColumn.setStatic(true);
         isColumn.setReturnType(GenUtils.javaType("boolean"));
         isColumn.addParameter(GenUtils.parameter("String", "column", null));
-        isColumn.addBodyLine("if (column == null || column.trim().length() == 0) {");
+        isColumn.addBodyLine("if (column == null || column.length() == 0) {");
         isColumn.addBodyLine("return false;");
         isColumn.addBodyLine("}");
         isColumn.addBodyLine("column = column.toLowerCase();");
